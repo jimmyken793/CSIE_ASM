@@ -5,7 +5,6 @@
 // important include is the mygba.h, which contains all the
 // macro definitions, and the HAMlib function prototypes.
 #include <mygba.h>
-//#include "game.h"
 
 /*********************************************************************************
  * MULTIBOOT is interesting.
