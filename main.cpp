@@ -2,47 +2,19 @@
  * Includes
  ********************************************************************************/
 #include "main.h"
-
+#include "display.h"
 /*********************************************************************************
  * Program entry point
  ********************************************************************************/
-int main(void)
-{
-    // Initialize HAMlib
-    // Then we call the single most important function of ham, ham_Init .
-    // This function must be called first thing when working with HAMlib,
-    // because all ham_* functions will only work correctly after this has been called.
-    // Behaviour of HAMlib is undefined if you comment this out.
-    ham_Init();
-
-    // Will, once activated, trigger the specified interrupt,
-    // and then call the function specified
-    ///ham_StartIntHandler(INT_TYPE_VBL,         // The Interrupts ID you want to start.
-     //                   (void *)&vblFunc);    // The adress of a function that should be called when the interrupt is fired
-    ham_SetBgMode(5);
-    // Loop
-    while(true){
-        for(int i=0;i<5;i++)
-            ham_PutLine(10+i,10,100+i,100,(u16)0xFF);
-    }
-
-    return 0;
+display_controller* GAME_display=NULL;
+int main(void){
+	ham_Init();
+	display_controller display;
+	GAME_display=&display;
+	ham_StartIntHandler(INT_TYPE_VBL,( void *)&callback);
+	while(true){}
+	return 0;
 }
-
-/*********************************************************************************
- * vblFunc(void)
- *
- * This function is called whenever the GBA is about
- * to draw a new picture onto the screen.
- ********************************************************************************/
-void vblFunc(void)
-{
-    // Call this (preferably during a VBL interrupt) to commit your
-    // ham_obj information to the hardware. Only after you did this your
-    // sprite changes will appear on screen.
-    ham_CopyObjToOAM();
-
-    // It's a new frame yet
-    g_NewFrame=true;
+void callback(){
+	GAME_display->int_handler();
 }
-/* END OF FILE */

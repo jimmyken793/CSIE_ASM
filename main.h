@@ -5,7 +5,6 @@
 // important include is the mygba.h, which contains all the
 // macro definitions, and the HAMlib function prototypes.
 #include <mygba.h>
-//#include "display.h"
 //#include "game.h"
 
 /*********************************************************************************
@@ -25,7 +24,7 @@ bool g_NewFrame=true;
 /*********************************************************************************
  * Prototypes
  ********************************************************************************/
-void vblFunc(void);
+void callback(void);
 
 
 #endif /* MAIN_H */
