@@ -17,19 +17,13 @@ int main(void)
 
     // Will, once activated, trigger the specified interrupt,
     // and then call the function specified
-    ham_StartIntHandler(INT_TYPE_VBL,         // The Interrupts ID you want to start.
-                        (void *)&vblFunc);    // The adress of a function that should be called when the interrupt is fired
-
+    ///ham_StartIntHandler(INT_TYPE_VBL,         // The Interrupts ID you want to start.
+     //                   (void *)&vblFunc);    // The adress of a function that should be called when the interrupt is fired
+    ham_SetBgMode(5);
     // Loop
-    while(true)
-    {
-        // It's a new frame?
-        if(g_NewFrame)
-        {
-
-            // Frames isn't new anymore
-            g_NewFrame=false;
-        }
+    while(true){
+        for(int i=0;i<5;i++)
+            ham_PutLine(10+i,10,100+i,100,(u16)0xFF);
     }
 
     return 0;
