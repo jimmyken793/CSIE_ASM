@@ -5,12 +5,17 @@
 
 class display_controller{
     private:
+		double theta;
+		bool rotate;
         map *data;
         int fps;
-        double rotation;
         int r_direction;
         int count;
         int lastbuffer;
+        int block_size;
+        int p_size;
+        int top;
+        int left;
         void (*unlock_fp)(void);
     public:
         bool refresh();

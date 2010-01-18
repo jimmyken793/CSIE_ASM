@@ -38,36 +38,41 @@ bool display_controller::refresh(map * data, void (*unlock)() ){
 	return true;
 }
 void display_controller::int_handler(){
+	static const int base[6][2]={{1,1},{2,1},{1,0},{1,2},{0,1},{1,3}};
 	count++;
-	if(count%10==0){
-		int base[6][2]={
-			{2,2},
-			{3,2},
-			{2,1},
-			{2,3},
-			{1,2},
-			{2,4}
-			};
+	if(count==2){
 		int t=count;
 		ham_ClearBackBuffer(0xFF);
-		//ham_VBAText("==============================\n");
 		for(int a=0;a<6;a++){
 			for(int i=0;i<M_SIZE;i++){
 				for(int ii=0;ii<M_SIZE;ii++){
-					ham_PutPixel(base[a][0]*2*M_SIZE+i*2,base[a][1]*2*M_SIZE+ii*2,this->data->get_int_map(a,i,ii));
-					ham_PutPixel(base[a][0]*2*M_SIZE+i*2+1,base[a][1]*2*M_SIZE+ii*2,this->data->get_int_map(a,i,ii));
-					ham_PutPixel(base[a][0]*2*M_SIZE+i*2,base[a][1]*2*M_SIZE+ii*2+1,this->data->get_int_map(a,i,ii));
-					ham_PutPixel(base[a][0]*2*M_SIZE+i*2+1,base[a][1]*2*M_SIZE+ii*2+1,this->data->get_int_map(a,i,ii));
-					//ham_VBAText("%d ",this->data->get(i,ii,0));
+					ham_PutPixel(7+base[a][0]*M_SIZE+i,30+base[a][1]*M_SIZE+ii,this->data->get_int_map(a,i,ii));
 				}
-				//ham_VBAText("\n");
 			}
+		}
+		if(rotate){
+			double y1=(p_size+p_size*sqrt(2)*sin((pi/-4)+((2*theta*pi)/180)))/2;
+			double y2=(p_size+p_size*sqrt(2)*cos((pi/-4)+((2*theta*pi)/180)))/2;
+			double z1=y2;
+			double z2=y1;
+			if(y1>=0&&y1<=p_size)
+				ham_PutLine(left,top+y1,left+p_size,top+y1,1);
+			if(y2>=0&&y2<=p_size)
+				ham_PutLine(left,top+y2,left+p_size,top+y2,1);
+			ham_PutLine(left,top,left,top+p_size,1);
+			ham_PutLine(left+p_size,top,left+p_size,top+p_size,1);
+			//ham_VBAText("%d\ttheta:%d\n",y,(int)theta);
+			if(theta<90)
+				theta++;
+				else theta=0;
+		}else{
 		}
 		//int basex=int(110+sin(t*pi/180)*40);
 		//int basey=70;
 		//ham_PutLine(basex-(40*cos(t*pi/180)),basey-(40*sin(t*pi/180)),(int)(basex+(40*cos(t*pi/180))),(int)(basey+(40*sin(t*pi/180))),(count/60)%3+2);
 		//ham_VBAText("%d %d\n",(int)(50+(40*cos(5*t*pi/180))),(int)(50+(40*sin(5*t*pi/180))));*/
 		ham_FlipBGBuffer();
+		count=0;
 	}
 }
 display_controller::display_controller(map* data, int fps){
@@ -84,5 +89,10 @@ display_controller::display_controller(map* data, int fps){
 	this->fps=fps;
 	this->data=data;
 	this->count=0;
-	lastbuffer=ham_GetBGBuffer();
+    block_size=10;
+	p_size=block_size*M_SIZE;
+    top=5;
+    left=60;
+	rotate=true;
+	theta=0;
 }
