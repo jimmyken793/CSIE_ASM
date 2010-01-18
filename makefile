@@ -62,7 +62,7 @@ KRAWALL_FILES=
 #
 # Set a list of files you want to compile
 #
-OFILES += display.o main.o game.o
+OFILES += display.o main.o game.o map.o snake.o
 
 ##########################################################################################
 # Standard Makefile targets start here
