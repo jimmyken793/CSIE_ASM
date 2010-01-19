@@ -14,6 +14,7 @@ class display_controller{
         int lastbuffer;
         int block_size;
         int p_size;
+        int distance;
         int top;
         int left;
         void (*unlock_fp)(void);

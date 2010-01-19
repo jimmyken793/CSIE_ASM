@@ -3,134 +3,318 @@
 <KigDocument axes="1" grid="1" CompatibilityVersion="0.7.0" Version="1.0" >
  <CoordinateSystem>Euclidean</CoordinateSystem>
  <Hierarchy>
-  <Data type="double" id="1" >0.595376</Data>
-  <Data type="double" id="2" >3.40513</Data>
-  <Data type="double" id="3" >-3.33202</Data>
-  <Object type="FixedPoint" id="4" >
-   <Parent id="3" />
+  <Data type="double" id="1" >-13.7162</Data>
+  <Data type="double" id="2" >-16.6745</Data>
+  <Data type="double" id="3" >8.94422</Data>
+  <Data type="int" id="4" >1</Data>
+  <Object type="FixedPoint" id="5" >
    <Parent id="2" />
+   <Parent id="3" />
   </Object>
-  <Data type="double" id="5" >0.316443</Data>
-  <Data type="double" id="6" >0.166213</Data>
+  <Data type="int" id="6" >-1</Data>
   <Data type="double" id="7" >3.42602</Data>
-  <Object type="FixedPoint" id="8" >
-   <Parent id="1" />
+  <Data type="double" id="8" >0.136963</Data>
+  <Data type="double" id="9" >0.316443</Data>
+  <Data type="double" id="10" >0.658047</Data>
+  <Data type="double" id="11" >0.56404</Data>
+  <Data type="double" id="12" >0.595376</Data>
+  <Object type="FixedPoint" id="13" >
+   <Parent id="12" />
    <Parent id="7" />
   </Object>
-  <Object type="SegmentAB" id="9" >
-   <Parent id="4" />
-   <Parent id="8" />
-  </Object>
-  <Property which="mid-point" id="10" >
-   <Parent id="9" />
-  </Property>
-  <Object type="Copy" id="11" >
+  <Data type="int" id="14" >0</Data>
+  <Data type="int" id="15" >0</Data>
+  <Data type="string" id="16" >%1</Data>
+  <Data type="double" id="17" >0.328084</Data>
+  <Data type="string" id="18" >%1</Data>
+  <Data type="string" id="19" >%1</Data>
+  <Data type="double" id="20" >0.609595</Data>
+  <Data type="int" id="21" >0</Data>
+  <Data type="double" id="22" >0.492811</Data>
+  <Data type="double" id="23" >0.664995</Data>
+  <Data type="string" id="24" >%1</Data>
+  <Object type="FixedPoint" id="25" >
    <Parent id="10" />
-  </Object>
-  <Object type="LinePerpend" id="12" >
-   <Parent id="9" />
    <Parent id="11" />
   </Object>
-  <Object type="ConstrainedPoint" id="13" >
-   <Parent id="6" />
-   <Parent id="12" />
-  </Object>
-  <Object type="RayAB" id="14" >
-   <Parent id="13" />
-   <Parent id="4" />
-  </Object>
-  <Object type="RayAB" id="15" >
-   <Parent id="13" />
-   <Parent id="8" />
-  </Object>
-  <Object type="ConstrainedPoint" id="16" >
-   <Parent id="5" />
-   <Parent id="12" />
-  </Object>
-  <Object type="LineParallel" id="17" >
-   <Parent id="9" />
-   <Parent id="16" />
-  </Object>
-  <Object type="LineLineIntersection" id="18" >
-   <Parent id="17" />
-   <Parent id="15" />
-  </Object>
-  <Object type="LineParallel" id="19" >
-   <Parent id="12" />
-   <Parent id="18" />
-  </Object>
-  <Object type="LineLineIntersection" id="20" >
-   <Parent id="19" />
-   <Parent id="9" />
-  </Object>
-  <Object type="LineLineIntersection" id="21" >
-   <Parent id="14" />
-   <Parent id="17" />
-  </Object>
-  <Object type="LineParallel" id="22" >
-   <Parent id="12" />
-   <Parent id="21" />
-  </Object>
-  <Object type="LineLineIntersection" id="23" >
-   <Parent id="22" />
-   <Parent id="9" />
-  </Object>
-  <Object type="SegmentAB" id="24" >
-   <Parent id="23" />
-   <Parent id="20" />
-  </Object>
-  <Object type="LinePerpend" id="25" >
-   <Parent id="17" />
-   <Parent id="8" />
-  </Object>
-  <Object type="LineLineIntersection" id="26" >
-   <Parent id="17" />
+  <Object type="SegmentAB" id="26" >
    <Parent id="25" />
+   <Parent id="13" />
   </Object>
-  <Object type="SegmentAB" id="27" >
-   <Parent id="20" />
+  <Property which="mid-point" id="27" >
    <Parent id="26" />
+  </Property>
+  <Object type="Copy" id="28" >
+   <Parent id="27" />
   </Object>
-  <Object type="LinePerpend" id="28" >
-   <Parent id="17" />
-   <Parent id="4" />
-  </Object>
-  <Object type="LineLineIntersection" id="29" >
-   <Parent id="17" />
+  <Object type="LinePerpend" id="29" >
+   <Parent id="26" />
    <Parent id="28" />
   </Object>
-  <Object type="SegmentAB" id="30" >
-   <Parent id="26" />
+  <Object type="ConstrainedPoint" id="30" >
+   <Parent id="9" />
    <Parent id="29" />
   </Object>
-  <Object type="SegmentAB" id="31" >
-   <Parent id="23" />
+  <Object type="LineParallel" id="31" >
+   <Parent id="26" />
+   <Parent id="30" />
+  </Object>
+  <Object type="LinePerpend" id="32" >
+   <Parent id="31" />
+   <Parent id="25" />
+  </Object>
+  <Object type="LineLineIntersection" id="33" >
+   <Parent id="31" />
+   <Parent id="32" />
+  </Object>
+  <Object type="LinePerpend" id="34" >
+   <Parent id="31" />
+   <Parent id="13" />
+  </Object>
+  <Object type="LineLineIntersection" id="35" >
+   <Parent id="31" />
+   <Parent id="34" />
+  </Object>
+  <Object type="SegmentAB" id="36" >
+   <Parent id="35" />
+   <Parent id="33" />
+  </Object>
+  <Object type="LineLineIntersection" id="37" >
    <Parent id="29" />
+   <Parent id="31" />
+  </Object>
+  <Object type="SegmentAB" id="38" >
+   <Parent id="35" />
+   <Parent id="37" />
+  </Object>
+  <Property which="length" id="39" >
+   <Parent id="38" />
+  </Property>
+  <Object type="ConstrainedPoint" id="40" >
+   <Parent id="22" />
+   <Parent id="38" />
+  </Object>
+  <Object type="Label" id="41" >
+   <Parent id="21" />
+   <Parent id="40" />
+   <Parent id="18" />
+   <Parent id="39" />
+  </Object>
+  <Object type="ConstrainedPoint" id="42" >
+   <Parent id="8" />
+   <Parent id="29" />
+  </Object>
+  <Object type="RayAB" id="43" >
+   <Parent id="42" />
+   <Parent id="13" />
+  </Object>
+  <Object type="LineLineIntersection" id="44" >
+   <Parent id="31" />
+   <Parent id="43" />
+  </Object>
+  <Object type="LineParallel" id="45" >
+   <Parent id="29" />
+   <Parent id="44" />
+  </Object>
+  <Object type="LineLineIntersection" id="46" >
+   <Parent id="45" />
+   <Parent id="26" />
+  </Object>
+  <Object type="SegmentAB" id="47" >
+   <Parent id="46" />
+   <Parent id="35" />
+  </Object>
+  <Object type="RayAB" id="48" >
+   <Parent id="42" />
+   <Parent id="25" />
+  </Object>
+  <Object type="LineLineIntersection" id="49" >
+   <Parent id="48" />
+   <Parent id="31" />
+  </Object>
+  <Object type="LineParallel" id="50" >
+   <Parent id="29" />
+   <Parent id="49" />
+  </Object>
+  <Object type="LineLineIntersection" id="51" >
+   <Parent id="50" />
+   <Parent id="26" />
+  </Object>
+  <Object type="SegmentAB" id="52" >
+   <Parent id="51" />
+   <Parent id="33" />
+  </Object>
+  <Property which="length" id="53" >
+   <Parent id="52" />
+  </Property>
+  <Object type="ConstrainedPoint" id="54" >
+   <Parent id="17" />
+   <Parent id="52" />
+  </Object>
+  <Object type="Label" id="55" >
+   <Parent id="14" />
+   <Parent id="54" />
+   <Parent id="19" />
+   <Parent id="53" />
+  </Object>
+  <Object type="SegmentAB" id="56" >
+   <Parent id="51" />
+   <Parent id="46" />
+  </Object>
+  <Property which="length" id="57" >
+   <Parent id="56" />
+  </Property>
+  <Object type="ConstrainedPoint" id="58" >
+   <Parent id="23" />
+   <Parent id="56" />
+  </Object>
+  <Object type="LineLineIntersection" id="59" >
+   <Parent id="29" />
+   <Parent id="56" />
+  </Object>
+  <Object type="SegmentAB" id="60" >
+   <Parent id="59" />
+   <Parent id="37" />
+  </Object>
+  <Property which="length" id="61" >
+   <Parent id="60" />
+  </Property>
+  <Object type="ConstrainedPoint" id="62" >
+   <Parent id="20" />
+   <Parent id="60" />
+  </Object>
+  <Object type="Label" id="63" >
+   <Parent id="15" />
+   <Parent id="62" />
+   <Parent id="16" />
+   <Parent id="61" />
+  </Object>
+  <Data type="int" id="64" >0</Data>
+  <Object type="Label" id="65" >
+   <Parent id="64" />
+   <Parent id="58" />
+   <Parent id="24" />
+   <Parent id="57" />
+  </Object>
+  <Data type="double" id="66" >6.32539</Data>
+  <Data type="double" id="67" >12.3266</Data>
+  <Data type="double" id="68" >8.94422</Data>
+  <Object type="FixedPoint" id="69" >
+   <Parent id="67" />
+   <Parent id="68" />
+  </Object>
+  <Object type="RayAB" id="70" >
+   <Parent id="5" />
+   <Parent id="69" />
+  </Object>
+  <Object type="FixedPoint" id="71" >
+   <Parent id="1" />
+   <Parent id="66" />
+  </Object>
+  <Object type="CircleBCP" id="72" >
+   <Parent id="5" />
+   <Parent id="71" />
+  </Object>
+  <Object type="SegmentAB" id="73" >
+   <Parent id="71" />
+   <Parent id="5" />
+  </Object>
+  <Object type="LineParallel" id="74" >
+   <Parent id="73" />
+   <Parent id="71" />
+  </Object>
+  <Object type="ConicLineOtherIntersection" id="75" >
+   <Parent id="72" />
+   <Parent id="74" />
+   <Parent id="71" />
+  </Object>
+  <Object type="SegmentAB" id="76" >
+   <Parent id="75" />
+   <Parent id="69" />
+  </Object>
+  <Object type="LinePerpend" id="77" >
+   <Parent id="73" />
+   <Parent id="5" />
+  </Object>
+  <Object type="ConicLineIntersection" id="78" >
+   <Parent id="72" />
+   <Parent id="77" />
+   <Parent id="4" />
+  </Object>
+  <Object type="RayAB" id="79" >
+   <Parent id="78" />
+   <Parent id="69" />
+  </Object>
+  <Object type="SegmentAB" id="80" >
+   <Parent id="78" />
+   <Parent id="71" />
+  </Object>
+  <Object type="SegmentAB" id="81" >
+   <Parent id="75" />
+   <Parent id="78" />
+  </Object>
+  <Object type="ConicLineIntersection" id="82" >
+   <Parent id="72" />
+   <Parent id="77" />
+   <Parent id="6" />
+  </Object>
+  <Object type="SegmentAB" id="83" >
+   <Parent id="75" />
+   <Parent id="82" />
+  </Object>
+  <Object type="SegmentAB" id="84" >
+   <Parent id="71" />
+   <Parent id="82" />
   </Object>
  </Hierarchy>
  <View>
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="28" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="17" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="75" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="70" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="73" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="69" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="82" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="60" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="65" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="32" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="31" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="37" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="42" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="48" />
   <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="13" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="14" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="8" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="18" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="29" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="4" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="44" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="33" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="25" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="35" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="45" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="43" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="50" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="56" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="55" />
   <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="26" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="19" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="15" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="22" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="24" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="9" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="27" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="31" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="12" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="20" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="23" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="47" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="52" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="29" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="38" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="46" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="51" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="36" />
   <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="30" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="16" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="21" />
-  <Draw width="-1" namecalcer="none" point-style="Round" shown="false" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="25" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="49" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="34" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="41" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="59" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="63" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="5" />
+  <Draw width="-1" namecalcer="none" point-style="Rectangular" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="71" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="80" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="79" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="74" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="81" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="83" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="72" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="77" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="78" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="76" />
+  <Draw width="-1" namecalcer="none" point-style="Round" shown="true" style="SolidLine" color="#0000ff" font="Liberation Sans,9,-1,5,50,0,0,0,0,0" object="84" />
  </View>
 </KigDocument>

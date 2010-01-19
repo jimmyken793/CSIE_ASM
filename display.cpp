@@ -3,7 +3,7 @@
 #include <mygba.h>
 #include "setting/setting.h"
 #include "display.h"
-#define pi 3.1415926
+#define pi 3.14159265358
 
 bool display_controller::refresh(){
 	return true;
@@ -51,20 +51,34 @@ void display_controller::int_handler(){
 			}
 		}
 		if(rotate){
-			double y1=(p_size+p_size*sqrt(2)*sin((pi/-4)+((2*theta*pi)/180)))/2;
-			double y2=(p_size+p_size*sqrt(2)*cos((pi/-4)+((2*theta*pi)/180)))/2;
-			double z1=y2;
-			double z2=y1;
-			if(y1>=0&&y1<=p_size)
-				ham_PutLine(left,top+y1,left+p_size,top+y1,1);
-			if(y2>=0&&y2<=p_size)
-				ham_PutLine(left,top+y2,left+p_size,top+y2,1);
-			ham_PutLine(left,top,left,top+p_size,1);
-			ham_PutLine(left+p_size,top,left+p_size,top+p_size,1);
-			//ham_VBAText("%d\ttheta:%d\n",y,(int)theta);
+			double angle=(theta*pi)/180;
+			double y1=(p_size+p_size*sqrt(2)*sin((pi/-4)+angle))/2;
+			double y2=(p_size-p_size*sqrt(2)*sin((pi/4)+angle))/2;
+			double y3=(p_size+p_size*sqrt(2)*sin((pi/4)+angle))/2;
+			double z1=distance-(p_size*sqrt(2)*sin((pi/4)+angle))/2;
+			double z2=distance+(p_size*sqrt(2)*cos((pi/4)+angle))/2;
+			double z3=distance-(p_size*sqrt(2)*cos((pi/4)+angle))/2;
+			int width2=p_size*z1/z2;
+			int width3=p_size*z1/z3;
+			int h=y1-y2;
+			width2=(width2*y1)/h;
+			h=y3-y1;
+			//width3=(width3*y1)/h;
+			y1=(y1>=0)?y1:0;
+			y2=(y2>=0)?y2:0;
+			y3=(y3<=p_size)?y3:p_size;
+			ham_PutLine(left,top+y1,left+p_size,top+y1,1);
+			
+			ham_PutLine(left+(p_size-width2)/2,top+y2,left+(p_size+width2)/2,top+y2,1);
+			ham_PutLine(left+(p_size-width2)/2,top+y2,left,top+y1,1);
+			ham_PutLine(left+(p_size+width2)/2,top+y2,left+p_size,top+y1,1);
+			
+			ham_PutLine(left+(p_size-width3)/2,top+y3,left+(p_size+width3)/2,top+y3,1);
+			ham_PutLine(left+(p_size-width3)/2,top+y3,left,top+y1,1);
+			ham_PutLine(left+(p_size+width3)/2,top+y3,left+p_size,top+y1,1);
 			if(theta<90)
 				theta++;
-				else theta=0;
+			//	else theta=0;
 		}else{
 		}
 		//int basex=int(110+sin(t*pi/180)*40);
@@ -91,6 +105,7 @@ display_controller::display_controller(map* data, int fps){
 	this->count=0;
     block_size=10;
 	p_size=block_size*M_SIZE;
+	distance=2*p_size;
     top=5;
     left=60;
 	rotate=true;
