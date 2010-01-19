@@ -1,5 +1,6 @@
 #include "snake.h"
 #include "setting/setting.h"
+#include "point.h"
 #include <mygba.h>
 snake::~snake(){
 }
@@ -13,18 +14,16 @@ snake::snake(int x,int y,int z,map* _map){
 	this->add_tail(x,y-2,z);
 	dx=1;
 	dy=0;
-	//ham_VBAText("%d, %d, %d\n",x,y,z);
 }
 void snake::move(){
 	add_head(remove_tail());
-	body[(tail-1)%maximum]=NULL;
-	tail=tail==0?maximum-1:tail-1;
 	object* h=body[(head+2)%maximum];
 	int nx=h->getx()+dx;
 	int ny=h->gety()+dy;
 	int nz=h->getz();
-	//ham_VBAText("%d, %d, %d\n",nx,ny,nz);
-	body[(head+1)%maximum]->setpos(nx,ny,nz);
+	ham_VBAText("%d, %d\n",head,tail);
+	ham_VBAText("%d, %d, %d\n",nx,ny,nz);
+	body[head==maximum-1?0:(head+1)]->setpos(nx,ny,nz);
 }
 void snake::set_ditection(int dx,int dy){
 	this->dx=dx;
