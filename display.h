@@ -6,7 +6,7 @@
 class display_controller{
     private:
 		double theta;
-		bool rotate;
+		bool rotating;
         map *data;
         int fps;
         int r_direction;
@@ -14,6 +14,7 @@ class display_controller{
         int lastbuffer;
         int block_size;
         int p_size;
+        int distance;
         int top;
         int left;
         void (*unlock_fp)(void);
@@ -34,6 +35,8 @@ class display_controller{
           unlock:
             unlock function
         */
+        void print_dot(int x,int y,int type);
+        void rotate(double theta,int direction);
         bool refresh(map * data, void (*unlock)() );
         void int_handler();
         display_controller(map* data=new map, int fps=26);
