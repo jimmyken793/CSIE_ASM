@@ -12,6 +12,8 @@ snake::snake(int x,int y,int z,map* _map){
 	this->add_head(x,y,z);
 	this->add_tail(x,y-1,z);
 	this->add_tail(x,y-2,z);
+	this->add_tail(x,y-3,z);
+	this->add_tail(x,y-4,z);
 	dx=1;
 	dy=0;
 }
@@ -21,11 +23,118 @@ void snake::move(){
 	int nx=h->getx()+dx;
 	int ny=h->gety()+dy;
 	int nz=h->getz();
-	ham_VBAText("%d, %d\n",head,tail);
-	ham_VBAText("%d, %d, %d\n",nx,ny,nz);
+	int side=0;
+	//int pos=0;
+	if(nx<0){
+		side=3;
+		switch(_map->get_s_r(nz,side)){
+			case 0:
+				set_direction(0,1);
+				nx=ny;
+				ny=0;
+			break;
+			case 1:
+				set_direction(-1,0);
+				ny=ny;
+				nx=M_SIZE-1;
+			break;
+			case 2:
+				set_direction(0,-1);
+				nx=M_SIZE-1-ny;
+				ny=M_SIZE-1;
+			break;
+			case 3:
+				set_direction(1,0);
+				ny=M_SIZE-1-ny;
+				nx=0;
+			break;
+		}
+		nz=_map->get_f_r(nz,side);
+		_map->rotate(side);
+	}else if(ny<0){
+		side=0;
+		switch(_map->get_s_r(nz,side)){
+			case 0:
+				set_direction(0,1);
+				nx=M_SIZE-1-nx;
+				ny=0;
+			break;
+			case 1:
+				set_direction(-1,0);
+				ny=M_SIZE-1-nx;
+				nx=M_SIZE-1;
+			break;
+			case 2:
+				ny=M_SIZE-1;
+			break;
+			case 3:
+				set_direction(1,0);
+				ny=nx;
+				nx=0;
+			break;
+		}
+		nz=_map->get_f_r(nz,side);
+		_map->rotate(side);
+	}else if(nx==M_SIZE){
+		side=1;
+		switch(_map->get_s_r(nz,side)){
+			case 0:
+				set_direction(0,1);
+				nx=M_SIZE-1-ny;
+				ny=0;
+			break;
+			case 1:
+				set_direction(-1,0);
+				ny=M_SIZE-1-ny;
+				nx=M_SIZE-1;
+			break;
+			case 2:
+				set_direction(0,-1);
+				nx=ny;
+				ny=M_SIZE-1;
+			break;
+			case 3:
+				set_direction(1,0);
+				ny=ny;
+				nx=0;
+			break;
+		}
+		nz=_map->get_f_r(nz,side);
+		_map->rotate(side);
+	}else if(ny==M_SIZE){
+		side=2;
+		switch(_map->get_s_r(nz,side)){
+			case 0:
+				set_direction(0,1);
+				nx=nx;
+				ny=0;
+			break;
+			case 1:
+				set_direction(-1,0);
+				ny=nx;
+				nx=M_SIZE-1;
+			break;
+			case 2:
+				set_direction(0,-1);
+				nx=M_SIZE-1-nx;
+				ny=M_SIZE-1;
+			break;
+			case 3:
+				set_direction(1,0);
+				ny=M_SIZE-1-nx;
+				nx=0;
+			break;
+		}
+		nz=_map->get_f_r(nz,side);
+		_map->rotate(side);
+	}else{
+	}
+	
+	//ham_VBAText("%d %d %d\n",nx,ny,nz);
 	body[head==maximum-1?0:(head+1)]->setpos(nx,ny,nz);
 }
-void snake::set_ditection(int dx,int dy){
+
+void snake::set_direction(int dx,int dy){
 	this->dx=dx;
 	this->dy=dy;
 }

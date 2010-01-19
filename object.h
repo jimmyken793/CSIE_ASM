@@ -1,6 +1,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 #include "map.h"
+class map;
 class object{
 	private:
 		int x,y,z;

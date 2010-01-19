@@ -1,15 +1,15 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 #include "setting/setting.h"
-#include "map.h"
 #include "object.h"
-
+#include "map.h"
+class object;
 class snake{
 	public:
 		snake(int z, int x, int y,map* _map);
 		~snake();
 		void move();
-		void set_ditection(int dx,int dy);
+		void set_direction(int dx,int dy);
 		int getdx();
 		int getdy();
 		void add_head(int x,int y,int z);

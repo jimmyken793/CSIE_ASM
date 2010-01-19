@@ -17,6 +17,7 @@ params:
 bool display_controller::refresh(map * data){
 	if(this->data!=data){
 		delete this->data;
+		//this->data=new map(*data);
 		this->data=data;
 	}
 	return true;
@@ -29,12 +30,16 @@ bool display_controller::refresh(map * data){
           unlock:
             unlock function
         */
-bool display_controller::refresh(map * data, void (*unlock)() ){
+bool display_controller::refresh(map * data, game* Game,int r_direction){
 	if(this->data!=data){
 		delete this->data;
+		//this->data=new map(*data);
 		this->data=data;
 	}
-	this->unlock_fp=unlock;
+	rotating=true;
+	theta=0;
+	this->r_direction=r_direction;
+	this->Game=Game;
 	return true;
 }
 
@@ -51,7 +56,9 @@ void display_controller::PutLine(point* a,point* b,int c){
 }
 
 void display_controller::rotate(){
-	double angle=(theta*pi*2)/180;
+	double angle=(theta*pi*10)/180;
+	if(angle>pi/2)
+		angle=pi/2;
 	point *p1=new point(0,(p_size+p_size*sqrt(2)*sin((pi/-4)+angle))/2,distance-(p_size*sqrt(2)*sin((pi/4)+angle))/2);
 	point *p2=new point(0,(p_size-p_size*sqrt(2)*sin((pi/4)+angle))/2,distance+(p_size*sqrt(2)*cos((pi/4)+angle))/2);
 	point *p3=new point(0,(p_size+p_size*sqrt(2)*sin((pi/4)+angle))/2,distance-(p_size*sqrt(2)*cos((pi/4)+angle))/2);
@@ -75,6 +82,13 @@ void display_controller::rotate(){
 	point *pe=new point((p_size-width3)/2,y3);
 	point *pf=new point((p_size+width3)/2,y3);
 	switch(r_direction){
+		case 0:
+			pa->reflectXY();
+			pb->reflectXY();
+			pc->reflectXY();
+			pd->reflectXY();
+			pe->reflectXY();
+			pf->reflectXY();
 		case 1:
 			pa->reflectXY();
 			pb->reflectXY();
@@ -119,20 +133,26 @@ void display_controller::rotate(){
 	delete pd;
 	delete pe;
 	delete pf;
-	if(angle<pi/2)
+	if(angle<pi/2){
 		theta++;
-	else{
+	}else{
 		theta=0;
-		//r_direction=(r_direction+1)%4;
+		r_direction=(r_direction+1)%4;
 		rotating=false;
+		to_unlock=true;
 	}
 }
 
 void display_controller::int_handler(){
+	if(data==0)
+		return;
 	static const int base[6][2]={{1,1},{2,1},{1,0},{1,2},{0,1},{1,3}};
+	if(to_unlock){
+		Game->unlock();
+		to_unlock=false;
+	}
 	count++;
 	if(count==1){
-		int t=count;
 		ham_ClearBackBuffer(0xFF);
 		for(int a=0;a<6;a++){
 			for(int i=0;i<M_SIZE;i++){
@@ -148,9 +168,30 @@ void display_controller::int_handler(){
 			ham_PutLine(left,top,left+p_size,top,1);
 			ham_PutLine(left,top+p_size,left+p_size,top+p_size,1);
 			ham_PutLine(left+p_size,top,left+p_size,top+p_size,1);
+			int camera=data->get_camera();
+			int initx,inity,x_inc,y_inc,x_end,y_end;
+			bool transpose=false,x_r=false,y_r=false;
+			switch(data->get_upside()){
+				case 0:
+				break;
+				case 1:
+					y_r=true;
+					transpose=true;
+				break;
+				case 2:
+					x_r=true;
+					y_r=true;
+				break;
+				case 3:
+					x_r=true;
+					transpose=true;
+				break;
+			}
 			for(int i=0;i<M_SIZE;i++){
 				for(int ii=0;ii<M_SIZE;ii++){
-					int type=this->data->get_int_map(0,i,ii);
+					int x=x_r?M_SIZE-1-i:i;
+					int y=y_r?M_SIZE-1-ii:ii;
+					int type=transpose?this->data->get_int_map(camera,y,x):this->data->get_int_map(camera,x,y);
 					if(type!=0)
 						print_dot(i,ii,type);
 				}
@@ -186,4 +227,5 @@ display_controller::display_controller(map* data, int fps){
 	rotating=false;
 	r_direction=0;
 	theta=0;
+	to_unlock=false;
 }

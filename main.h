@@ -24,6 +24,7 @@ bool g_NewFrame=true;
  * Prototypes
  ********************************************************************************/
 void callback(void);
+void key(void);
 
 
 #endif /* MAIN_H */

@@ -3,6 +3,9 @@
 #include "setting/setting.h"
 #include "point.h"
 #include "map.h"
+#include "game.h"
+class game;
+class map;
 void ham_PutLine(point* a,point* b,int c);
 class display_controller{
     private:
@@ -18,7 +21,8 @@ class display_controller{
         int distance;
         int top;
         int left;
-        void (*unlock_fp)(void);
+        game* Game;
+        bool to_unlock;
     public:
         bool refresh();
         /*
@@ -38,10 +42,10 @@ class display_controller{
         */
         void print_dot(int x,int y,int type);
         void rotate();
-        bool refresh(map * data, void (*unlock)() );
+        bool refresh(map * data, game* Game,int r_direction);
         void PutLine(point* a,point* b,int c);
         void int_handler();
-        display_controller(map* data=new map, int fps=26);
+        display_controller(map* data=0, int fps=26);
 };
 
 
