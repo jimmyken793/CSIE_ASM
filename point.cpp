@@ -1,18 +1,38 @@
 #include "point.h"
 
-int point::getX(){
+double point::getX(){
 	return x;
 }
-int point::getY(){
+double point::getY(){
 	return y;
 }
-void point::setX(int x){
+double point::getZ(){
+	return z;
+}
+void point::setX(double x){
 	this->x=x;
 }
-void point::setY(int y){
+void point::setY(double y){
 	this->y=y;
 }
-point::point(int x,int y){
+void point::setZ(double z){
+	this->z=z;
+}
+point::point(double x,double y,double z){
 	this->x=x;
 	this->y=y;
+	this->z=z;
+}
+
+void point::reflectXY(){
+	double tmp=x;
+	x=y;
+	y=tmp;
+}
+
+void point::reflectX(double ax){
+	x=ax+(ax-x);
+}
+void point::reflectY(double ay){
+	y=ay+(ay-y);
 }

@@ -3,13 +3,18 @@
 
 class point{
 	private:
-		int x,y;
+		double x,y,z;
 	public:
-		int getX();
-		int getY();
-		void setX(int x);
-		void setY(int y);
-		point(int x=0,int y=0);
+		double getX();
+		double getY();
+		double getZ();
+		void setX(double x);
+		void setY(double y);
+		void setZ(double z);
+		point(double x=0,double y=0,double z=0);
+		void reflectXY();
+		void reflectX(double ax);
+		void reflectY(double ay);
 };
 
 #endif

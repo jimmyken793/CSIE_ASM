@@ -46,42 +46,92 @@ void display_controller::print_dot(int x,int y,int type){
 	}
 }
 
-void display_controller::rotate(double theta,int direction){
-	double angle=(theta*pi)/180;
-	double y1=(p_size+p_size*sqrt(2)*sin((pi/-4)+angle))/2;
-	double y2=(p_size-p_size*sqrt(2)*sin((pi/4)+angle))/2;
-	double y3=(p_size+p_size*sqrt(2)*sin((pi/4)+angle))/2;
-	double z1=distance-(p_size*sqrt(2)*sin((pi/4)+angle))/2;
-	double z2=distance+(p_size*sqrt(2)*cos((pi/4)+angle))/2;
-	double z3=distance-(p_size*sqrt(2)*cos((pi/4)+angle))/2;
-	int width2=p_size*z1/z2;
-	int width3=p_size*z1/z3;
-	int h=y1-y2;
-	width2=(width2*y1)/h;
-	h=y3-y1;
-	width3+=((width3-p_size)*(p_size-y1))/h;
-	y1=(y1>=0)?nearbyint(y1):0;
-	y2=(y2>=0)?nearbyint(y2):0;;
-	y3=(y3<=p_size)?nearbyint(y3):p_size;
-	ham_PutLine(left,top+y1,left+p_size,top+y1,1);
-	
-	ham_PutLine(left+(p_size-width2)/2,top+y2,left+(p_size+width2)/2,top+y2,1);
-	ham_PutLine(left+(p_size-width2)/2,top+y2,left,top+y1,1);
-	ham_PutLine(left+(p_size+width2)/2,top+y2,left+p_size,top+y1,1);
-	
-	ham_PutLine(left+(p_size-width3)/2,top+y3,left+(p_size+width3)/2,top+y3,1);
-	ham_PutLine(left+(p_size-width3)/2,top+y3,left,top+y1,1);
-	ham_PutLine(left+(p_size+width3)/2,top+y3,left+p_size,top+y1,1);
+void display_controller::PutLine(point* a,point* b,int c){
+	ham_PutLine(left+a->getX(),top+a->getY(),left+b->getX(),top+b->getY(),c);
+}
+
+void display_controller::rotate(){
+	double angle=(theta*pi*2)/180;
+	point *p1=new point(0,(p_size+p_size*sqrt(2)*sin((pi/-4)+angle))/2,distance-(p_size*sqrt(2)*sin((pi/4)+angle))/2);
+	point *p2=new point(0,(p_size-p_size*sqrt(2)*sin((pi/4)+angle))/2,distance+(p_size*sqrt(2)*cos((pi/4)+angle))/2);
+	point *p3=new point(0,(p_size+p_size*sqrt(2)*sin((pi/4)+angle))/2,distance-(p_size*sqrt(2)*cos((pi/4)+angle))/2);
+	double width2=p_size*p1->getZ()/p2->getZ();
+	double width3=p_size*p1->getZ()/p3->getZ();
+	double h=p1->getY()-p2->getY();
+	if(h>0.001)
+		width2=(width2*p1->getY())/h;
+	h=p3->getY()-p1->getY();
+	width3+=((width3-p_size)*(p_size-p1->getY()))/h;
+	double y1=(p1->getY()>=0)?p1->getY():0;
+	double y2=(p2->getY()>=0)?p2->getY():0;
+	double y3=(p3->getY()<=p_size)?p2->getY():p_size;
+	delete p1;
+	delete p2;
+	delete p3;
+	point *pa=new point((p_size-width2)/2,y2);
+	point *pb=new point((p_size+width2)/2,y2);
+	point *pc=new point(0,y1);
+	point *pd=new point(p_size,y1);
+	point *pe=new point((p_size-width3)/2,y3);
+	point *pf=new point((p_size+width3)/2,y3);
+	switch(r_direction){
+		case 1:
+			pa->reflectXY();
+			pb->reflectXY();
+			pc->reflectXY();
+			pd->reflectXY();
+			pe->reflectXY();
+			pf->reflectXY();
+			pa->reflectX(p_size/2);
+			pb->reflectX(p_size/2);
+			pc->reflectX(p_size/2);
+			pd->reflectX(p_size/2);
+			pe->reflectX(p_size/2);
+			pf->reflectX(p_size/2);
+		break;
+		case 2:
+			pa->reflectY(p_size/2);
+			pb->reflectY(p_size/2);
+			pc->reflectY(p_size/2);
+			pd->reflectY(p_size/2);
+			pe->reflectY(p_size/2);
+			pf->reflectY(p_size/2);
+		break;
+		case 3:
+			pa->reflectXY();
+			pb->reflectXY();
+			pc->reflectXY();
+			pd->reflectXY();
+			pe->reflectXY();
+			pf->reflectXY();
+		break;
+	}
+	PutLine(pa,pb,1);
+	PutLine(pa,pc,1);
+	PutLine(pd,pb,1);
+	PutLine(pc,pd,1);
+	PutLine(pc,pe,1);
+	PutLine(pe,pf,1);
+	PutLine(pd,pf,1);
+	delete pa;
+	delete pb;
+	delete pc;
+	delete pd;
+	delete pe;
+	delete pf;
 	if(angle<pi/2)
 		theta++;
-	else
+	else{
+		theta=0;
+		//r_direction=(r_direction+1)%4;
 		rotating=false;
+	}
 }
 
 void display_controller::int_handler(){
 	static const int base[6][2]={{1,1},{2,1},{1,0},{1,2},{0,1},{1,3}};
 	count++;
-	if(count==2){
+	if(count==1){
 		int t=count;
 		ham_ClearBackBuffer(0xFF);
 		for(int a=0;a<6;a++){
@@ -92,35 +142,7 @@ void display_controller::int_handler(){
 			}
 		}
 		if(rotating){
-			double angle=(theta*pi)/180;
-			double y1=(p_size+p_size*sqrt(2)*sin((pi/-4)+angle))/2;
-			double y2=(p_size-p_size*sqrt(2)*sin((pi/4)+angle))/2;
-			double y3=(p_size+p_size*sqrt(2)*sin((pi/4)+angle))/2;
-			double z1=distance-(p_size*sqrt(2)*sin((pi/4)+angle))/2;
-			double z2=distance+(p_size*sqrt(2)*cos((pi/4)+angle))/2;
-			double z3=distance-(p_size*sqrt(2)*cos((pi/4)+angle))/2;
-			int width2=p_size*z1/z2;
-			int width3=p_size*z1/z3;
-			int h=y1-y2;
-			width2=(width2*y1)/h;
-			h=y3-y1;
-			width3+=((width3-p_size)*(p_size-y1))/h;
-			y1=(y1>=0)?nearbyint(y1):0;
-			y2=(y2>=0)?nearbyint(y2):0;;
-			y3=(y3<=p_size)?nearbyint(y3):p_size;
-			ham_PutLine(left,top+y1,left+p_size,top+y1,1);
-			
-			ham_PutLine(left+(p_size-width2)/2,top+y2,left+(p_size+width2)/2,top+y2,1);
-			ham_PutLine(left+(p_size-width2)/2,top+y2,left,top+y1,1);
-			ham_PutLine(left+(p_size+width2)/2,top+y2,left+p_size,top+y1,1);
-			
-			ham_PutLine(left+(p_size-width3)/2,top+y3,left+(p_size+width3)/2,top+y3,1);
-			ham_PutLine(left+(p_size-width3)/2,top+y3,left,top+y1,1);
-			ham_PutLine(left+(p_size+width3)/2,top+y3,left+p_size,top+y1,1);
-			if(angle<pi/2)
-				theta++;
-			else
-				rotating=false;
+			rotate();
 		}else{
 			ham_PutLine(left,top,left,top+p_size,1);
 			ham_PutLine(left,top,left+p_size,top,1);
@@ -156,11 +178,12 @@ display_controller::display_controller(map* data, int fps){
 	this->fps=fps;
 	this->data=data;
 	this->count=0;
-    block_size=10;
+    block_size=8;
 	p_size=block_size*M_SIZE;
 	distance=2*p_size;
-    top=5;
+    top=15;
     left=60;
-	rotating=true;
+	rotating=false;
+	r_direction=0;
 	theta=0;
 }
