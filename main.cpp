@@ -26,6 +26,3 @@ void callback(){
 	GAME->int_handler();
 	GAME_display->int_handler();
 }
-void key(){
-	GAME->key();
-}

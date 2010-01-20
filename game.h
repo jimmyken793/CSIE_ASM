@@ -13,6 +13,7 @@ class game{
 		void unlock();
 		void int_handler();		// timer;
 		game(display_controller *display);
+		sample_info* mysample;
 		~game();
 		void key();
 	private:
@@ -37,8 +38,11 @@ class game{
 		int Next_head_y;
 		int Next_head_z;
 		
-	
-		void game::createApple();
+	    void createBarrier();
+		void createApple();
+		void createShit();
+		void shitWalk();
+		void updateShit(int z, int x , int y, snake* tmpS);
 		void checkApple(int pos_z, int pos_x, int pos_y);	
 		void appleWalk();
 		void updateAppleWalk(int z, int x, int y, snake* tmpS);

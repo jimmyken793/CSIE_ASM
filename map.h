@@ -35,6 +35,7 @@ class map{
 		
 		//elements that construct the whole map;
 		// blank = 0; apple = 1; snakeHead = 2; snakeBody = 3; barrier = 4;
+		// shit =5;
 		int int_map[6][M_SIZE][M_SIZE];
 		//		    z	 x		 y
 		int snakeSizeNow;

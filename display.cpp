@@ -11,7 +11,7 @@ bool display_controller::refresh(){
 /*
 function refresh
 params:
-	data:
+	data:z
 		map data
 */
 bool display_controller::refresh(map * data){
@@ -55,45 +55,106 @@ void display_controller::print_dot(int x,int y,int type){
 	}
 }
 
-void display_controller::print_dot(int x,int y,point *origin,point *ax,point *ay,int r_direction,int type){
+void display_controller::print_dot(int x,int y,point *origin,point *ax,point *ay,int r_direction,int mode,int type){
+	if(type!=0){
+		if(mode==1){
+		//printf("%d,%d\tmode:%d\n",(int)ax->getX(),(int)ax->getY(),mode);
+		//printf("%d,%d\t\n",(int)ay->getX(),(int)ay->getY());
+		}
+		for(int iii=0;iii<block_size;iii++){
+			switch(r_direction){
+				case 0:
+					if(ay->getY()>=3||ay->getY()<=3){
+						double delta=((y*block_size+iii)*(ay->getX())/ay->getY());
+						double width=p_size-delta*2;
+						double size=width/M_SIZE;
+						double dx=size*x+(delta);
+						double dy=top+origin->getY()-((y*block_size+iii)*(ay->getY()))/p_size;
+						if(dy>=top&&dy<=top+p_size&&dx>=0&&dx<=240)
+							ham_PutLine(left+dx,dy,left+size+dx,dy,type);
+					}
+				break;
+				case 1:
+					if(ay->getX()>=3||ay->getX()<=3){
+						double delta=(((M_SIZE-x-1)*block_size+iii)*(ay->getY())/ay->getX());
+						double width=p_size+delta*2;
+						double size=width/M_SIZE;
+						double dx=origin->getX()+(((M_SIZE-x-1)*block_size+iii)*(ay->getX()))/p_size;
+						
+						if(dx>=0&&dx<=p_size)
+							ham_PutLine(left+dx,top+size*y-(delta),left+dx,top+size*(y+1)-(delta),type);
+					}
+				break;
+				case 2:
+					if(ay->getY()>=3||ay->getY()<=3){
+						double delta=(((M_SIZE-y-1)*block_size+iii)*(ay->getX())/ay->getY());
+						double width=p_size-delta*2;
+						double size=width/M_SIZE;
+						double dy=top+origin->getY()+(((M_SIZE-y-1)*block_size+iii)*(ay->getY()))/p_size;
+						if(dy>=top&&dy<=top+p_size)
+							ham_PutLine(left+size*x+(delta),dy,left+size*(x+1)+(delta),dy,type);
+					}
+				break;
+				case 3:
+					if(ay->getX()>=3||ay->getX()<=3){
+						double delta=((x*block_size+iii)*(ay->getY())/ay->getX());
+						double width=p_size+delta*2;
+						double size=width/M_SIZE;
+						double dx=left+origin->getX()+((x*block_size+iii)*(ay->getX()))/p_size;
+						if(dx>=left&&dx<=left+p_size)
+							ham_PutLine(dx,top+size*y-(delta),dx,top+size*(y+1)-(delta),type);
+					}
+				break;
+			}
+		}
+	}
+}
+
+void display_controller::print_dot1(int x,int y,point *origin,point *ax,point *ay,int r_direction,int mode,int type){
 	if(type!=0){
 		for(int iii=0;iii<block_size;iii++){
 			switch(r_direction){
-				case 0:{
-					double dy=top+origin->getY()-((y*block_size+iii)*(ay->getY()))/p_size;
-					double delta=-1*((y*block_size+iii)*(ay->getX())/ay->getY());
-					double width=p_size-delta*2;
-					double size=width/M_SIZE;
-					if(dy>=top&&dy<=top+p_size)
-						ham_PutLine(left+size*x+(delta),dy,left+size*(x+1)+(delta),dy,type);
-				}
+				case 0:
+					if(ay->getY()>=3||ay->getY()<=3){
+						double delta=((y*block_size+iii)*(ay->getX())/ay->getY());
+						double width=p_size-delta*2;
+						double size=width/M_SIZE;
+						double dx=size*x+(delta);
+						double dy=top+origin->getY()-((y*block_size+iii)*(ay->getY()))/p_size;
+						if(dy>=top&&dy<=top+p_size&&dx>=0&&dx<=240)
+							ham_PutLine(left+dx,dy,left+size+dx,dy,type);
+					}
 				break;
-				case 2:{
-					double delta=(((M_SIZE-y-1)*block_size+iii)*(ay->getX())/ay->getY());
-					double width=p_size-delta*2;
-					double size=width/M_SIZE;
-					int dy=top+origin->getY()+(((M_SIZE-y-1)*block_size+iii)*(ay->getY()))/p_size;
-					if(dy>=top&&dy<=top+p_size)
-						ham_PutLine(left+size*x+(delta),dy,left+size*(x+1)+(delta),dy,type);
-				}
+				case 1:
+					if(ay->getX()>=3||ay->getX()<=3){
+						double delta=(((x)*block_size+iii)*(ay->getY())/ay->getX());
+						double width=p_size+delta*2;
+						double size=width/M_SIZE;
+						double dx=origin->getX()+(((x)*block_size+iii)*(ay->getX()))/p_size;
+						
+						if(dx>=0&&dx<=p_size)
+							ham_PutLine(left+dx,top+size*y-(delta),left+dx,top+size*(y+1)-(delta),type);
+					}
 				break;
-				case 1:{
-					double delta=(((M_SIZE-x-1)*block_size+iii)*(ay->getY())/ay->getX());
-					double width=p_size+delta*2;
-					double size=width/M_SIZE;
-					int dx=left+origin->getX()+(((M_SIZE-x-1)*block_size+iii)*(ay->getX()))/p_size;
-					if(dx>=left&&dx<=left+p_size)
-						ham_PutLine(dx,top+size*y-(delta),dx,top+size*(y+1)-(delta),type);
-				}
+				case 2:
+					if(ay->getY()>=3||ay->getY()<=3){
+						double delta=(((y)*block_size+iii)*(ay->getX())/ay->getY());
+						double width=p_size-delta*2;
+						double size=width/M_SIZE;
+						double dy=top+origin->getY()+(((y)*block_size+iii)*(ay->getY()))/p_size;
+						if(dy>=top&&dy<=top+p_size)
+							ham_PutLine(left+size*x+(delta),dy,left+size*(x+1)+(delta),dy,type);
+					}
 				break;
-				case 3:{
-					double delta=((x*block_size+iii)*(ay->getY())/ay->getX());
-					double width=p_size+delta*2;
-					double size=width/M_SIZE;
-					int dx=left+origin->getX()+((x*block_size+iii)*(ay->getX()))/p_size;
-					if(dx>=left&&dx<=left+p_size)
-						ham_PutLine(dx,top+size*y-(delta),dx,top+size*(y+1)-(delta),type);
-				}
+				case 3:
+					if(ay->getX()>=3||ay->getX()<=3){
+						double delta=((x*block_size+iii)*(ay->getY())/ay->getX());
+						double width=p_size+delta*2;
+						double size=width/M_SIZE;
+						double dx=left+origin->getX()+((x*block_size+iii)*(ay->getX()))/p_size;
+						if(dx>=left&&dx<=left+p_size)
+							ham_PutLine(dx,top+size*y-(delta),dx,top+size*(y+1)-(delta),type);
+					}
 				break;
 			}
 		}
@@ -105,7 +166,7 @@ void display_controller::PutLine(point* a,point* b,int c){
 }
 
 void display_controller::rotate(){
-	double angle=(theta*pi*25)/180;
+	double angle=(theta*pi*23)/180;
 	if(angle>pi/2)
 		angle=pi/2;
 	point *p1=new point(0,(p_size+p_size*sqrt(2)*sin((pi/-4)+angle))/2,distance-(p_size*sqrt(2)*sin((pi/4)+angle))/2);
@@ -114,76 +175,28 @@ void display_controller::rotate(){
 	double width2=p_size*p1->getZ()/p2->getZ();
 	double width3=p_size*p1->getZ()/p3->getZ();
 	
-	
 	point *va=new point((p_size-width2)/(2),(p2->getY()-p1->getY()));
 	point *vb=new point((width2-p_size)/(2),(p2->getY()-p1->getY()));
 	point *vc=new point(p_size,0.0);
 	point *vd=new point(p_size*-1,0.0);
 	point *ve=new point((p_size-width3)/(2),(p3->getY()-p1->getY()));
 	point *vf=new point((width3-p_size)/(2),(p3->getY()-p1->getY()));
-	
-	double h=p1->getY()-p2->getY();
-	if(h>0.001)
-		width2+=(((double)p_size-width2)*(-1*p2->getY())/h);
-	h=p3->getY()-p1->getY();
-	width3+=((p_size-width3)*(p3->getY()-p_size))/h;
-	double y1=(p1->getY()>=0)?p1->getY():0;
-	double y2=(p2->getY()>=0)?p2->getY():0;
-	double y3=(p3->getY()<=p_size)?p3->getY():p_size;
-	delete p1;
-	delete p2;
-	delete p3;
-	point *pa=new point((p_size-width2)/2.0,y2);
-	point *pb=new point((p_size+width2)/2.0,y2);
-	point *pc=new point(0,y1);
-	point *pd=new point(p_size,y1);
-	point *pe=new point((p_size-width3)/2.0,y3);
-	point *pf=new point((p_size+width3)/2.0,y3);
 	switch(r_direction){
 		case 0:
-			pa->reflectXY();
-			pb->reflectXY();
-			pc->reflectXY();
-			pd->reflectXY();
-			pe->reflectXY();
-			pf->reflectXY();
-			va->reflectXY();
-			vb->reflectXY();
-			vc->reflectXY();
-			vd->reflectXY();
-			ve->reflectXY();
-			vf->reflectXY();
-			pa->reflectY(p_size/2);
-			pb->reflectY(p_size/2);
-			pc->reflectY(p_size/2);
-			pd->reflectY(p_size/2);
-			pe->reflectY(p_size/2);
-			pf->reflectY(p_size/2);
 			va->reverseXY();
 			vb->reverseXY();
 			vc->reverseXY();
 			vd->reverseXY();
 			ve->reverseXY();
 			vf->reverseXY();
+		break;
 		case 1:
-			pa->reflectXY();
-			pb->reflectXY();
-			pc->reflectXY();
-			pd->reflectXY();
-			pe->reflectXY();
-			pf->reflectXY();
 			va->reflectXY();
 			vb->reflectXY();
 			vc->reflectXY();
 			vd->reflectXY();
 			ve->reflectXY();
 			vf->reflectXY();
-			pa->reflectX(p_size/2);
-			pb->reflectX(p_size/2);
-			pc->reflectX(p_size/2);
-			pd->reflectX(p_size/2);
-			pe->reflectX(p_size/2);
-			pf->reflectX(p_size/2);
 			va->reverseX();
 			vb->reverseX();
 			vc->reverseX();
@@ -192,24 +205,12 @@ void display_controller::rotate(){
 			vf->reverseX();
 		break;
 		case 2:
-			pa->reflectY(p_size/2);
-			pb->reflectY(p_size/2);
-			pc->reflectY(p_size/2);
-			pd->reflectY(p_size/2);
-			pe->reflectY(p_size/2);
-			pf->reflectY(p_size/2);
 			va->reverseY();
 			vb->reverseY();
 			vc->reverseY();
 			vd->reverseY();
 			ve->reverseY();
 			vf->reverseY();
-			pa->reflectX(p_size/2);
-			pb->reflectX(p_size/2);
-			pc->reflectX(p_size/2);
-			pd->reflectX(p_size/2);
-			pe->reflectX(p_size/2);
-			pf->reflectX(p_size/2);
 			va->reverseX();
 			vb->reverseX();
 			vc->reverseX();
@@ -218,24 +219,12 @@ void display_controller::rotate(){
 			vf->reverseX();
 		break;
 		case 3:
-			pa->reflectXY();
-			pb->reflectXY();
-			pc->reflectXY();
-			pd->reflectXY();
-			pe->reflectXY();
-			pf->reflectXY();
 			va->reflectXY();
 			vb->reflectXY();
 			vc->reflectXY();
 			vd->reflectXY();
 			ve->reflectXY();
 			vf->reflectXY();
-			pa->reflectY(p_size/2);
-			pb->reflectY(p_size/2);
-			pc->reflectY(p_size/2);
-			pd->reflectY(p_size/2);
-			pe->reflectY(p_size/2);
-			pf->reflectY(p_size/2);
 			va->reverseY();
 			vb->reverseY();
 			vc->reverseY();
@@ -244,7 +233,58 @@ void display_controller::rotate(){
 			vf->reverseY();
 		break;
 	}
+	double h=p1->getY()-p2->getY();
+	if(h>0.001)
+		width2+=(((double)p_size-width2)*(-1*p2->getY())/h);
+	h=p3->getY()-p1->getY();
+	width3+=((p_size-width3)*(p3->getY()-p_size))/h;
+	double y1=(p1->getY()>=0)?p1->getY():0;
+	y1=y1<p_size?y1:p_size;
+	double y2=(p2->getY()>=0)?p2->getY():0;
+	double y3=(p3->getY()<=p_size)?p3->getY():p_size;
+	point *pa;
+	point *pb;
+	point *pc;
+	point *pd;
+	point *pe;
+	point *pf;
+	switch(r_direction%4){
+		case 0:
+			
+			pa=new point((p_size-width2)/2,y2);
+			pb=new point((p_size+width2)/2,y2);
+			pc=new point(0,y1);
+			pd=new point(p_size,y1);
+			pe=new point((p_size-width3)/2,y3);
+			pf=new point((p_size+width3)/2,y3);
+		break;
+		case 1:
+			pa=new point(p_size-y2,(p_size-width2)/2.0);
+			pb=new point(p_size-y2,(p_size+width2)/2.0);
+			pc=new point(p_size-y1,0);
+			pd=new point(p_size-y1,p_size);
+			pe=new point(p_size-y3,(p_size-width3)/2.0);
+			pf=new point(p_size-y3,(p_size+width3)/2.0);
+		break;
+		case 2:
+			pa=new point((p_size+width2)/2.0,p_size-y2);
+			pb=new point((p_size-width2)/2.0,p_size-y2);
+			pc=new point(p_size,p_size-y1);
+			pd=new point(0,p_size-y1);
+			pe=new point((p_size+width3)/2.0,p_size-y3);
+			pf=new point((p_size-width3)/2.0,p_size-y3);
+		break;
+		case 3:
+			pa=new point(y2,(p_size+width2)/2.0);
+			pb=new point(y2,(p_size-width2)/2.0);
+			pc=new point(y1,p_size);
+			pd=new point(y1,0);
+			pe=new point(y3,(p_size+width3)/2.0);
+			pf=new point(y3,(p_size-width3)/2.0);
+		break;
+	}
 	bool transpose=false,x_r=false,y_r=false;
+	bool transpose1=false,x_r1=false,y_r1=false;
 	switch(old_upside){
 		case 0:
 		break;
@@ -261,6 +301,81 @@ void display_controller::rotate(){
 			transpose=true;
 		break;
 	}
+	printf("%d, %d\n",s_relation[old_camera][(old_upside+r_direction)%4],r_direction);
+	
+	switch(s_relation[old_camera][(old_upside+r_direction)%4]){
+		case 0:
+			switch(r_direction){
+				case 0://
+					x_r1=true;
+				break;
+				case 1://x
+					transpose1=true;
+					y_r1=true;
+				break;
+				case 2://x
+				break;
+				case 3://x
+					transpose1=true;
+				break;
+			}
+		break;
+		case 1:
+			switch(r_direction){
+				case 0:
+					y_r1=true;
+					x_r1=true;
+					transpose1=true;
+				break;
+				case 1://x
+					y_r1=true;
+					x_r1=true;
+				break;
+				case 2:
+					transpose1=true;
+					y_r1=true;
+				break;
+				case 3://x
+					x_r1=true;
+				break;
+			}
+		break;
+		case 2:
+			switch(r_direction){
+				case 0://x
+					y_r1=true;
+				break;
+				case 1://x
+					x_r1=true;
+					transpose1=true;
+				break;
+				case 2:
+					x_r1=true;
+					y_r1=true;
+				break;
+				case 3:
+					x_r1=true;
+					y_r1=true;
+					transpose1=true;
+				break;
+			}
+		break;
+		case 3:
+			switch(r_direction){
+				case 0:
+					transpose1=true;
+				break;
+				case 1://x
+				break;
+				case 2:
+					y_r1=true;
+				break;
+				case 3:
+					y_r1=true;
+				break;
+			}
+		break;
+	}
 	for(int i=0;i<M_SIZE;i++){
 		for(int ii=0;ii<M_SIZE;ii++){
 			int x,y;
@@ -273,15 +388,29 @@ void display_controller::rotate(){
 			}
 			int type=this->data->get_int_map(old_camera,x,y);
 			if(type!=0){
-				print_dot(i,ii,pc,vc,ve,r_direction,type);
+				print_dot(i,ii,pc,vc,ve,r_direction,0,type);
 			}
+			if(transpose1){
+				y=x_r1?M_SIZE-1-i:i;
+				x=y_r1?M_SIZE-1-ii:ii;
+			}else{
+				x=x_r1?M_SIZE-1-i:i;
+				y=y_r1?M_SIZE-1-ii:ii;
+			}
+			type=this->data->get_int_map(data->get_camera(),x,y);
+			if(type!=0){
+				print_dot1(i,ii,pd,vd,vb,r_direction,1,type);
+			}
+			//printf("%d ",type);
 		}
+		//printf("\n");
 	}
+	//printf("==========================\n");
 	PutLine(pa,pb,1);
 	PutLine(pa,pc,1);
-	PutLine(pd,pb,1);
-	PutLine(pc,pd,3);
-	PutLine(pc,pe,2);
+	PutLine(pd,pb,3);
+	PutLine(pc,pd,2);
+	PutLine(pc,pe,1);
 	PutLine(pe,pf,1);
 	PutLine(pd,pf,1);
 	delete pa;
@@ -296,6 +425,9 @@ void display_controller::rotate(){
 	delete vd;
 	delete ve;
 	delete vf;
+	delete p1;
+	delete p2;
+	delete p3;
 	if(angle<pi/2){
 		theta++;
 	}else{
@@ -315,7 +447,7 @@ void display_controller::int_handler(){
 		to_unlock=false;
 	}
 	count++;
-	if(count==3){
+	if(count==15){
 		ham_ClearBackBuffer(0xFF);
 		for(int a=0;a<6;a++){
 			for(int i=0;i<M_SIZE;i++){
@@ -375,6 +507,65 @@ display_controller::display_controller(map* data, int fps){
 	ham_ClearBackBuffer(0xFF);
 	ham_FlipBGBuffer();
 	ham_ClearBackBuffer(0xFF);
+	s_relation[0][0]=2;
+	s_relation[0][1]=3;
+	s_relation[0][2]=0;
+	s_relation[0][3]=1;
+	
+	s_relation[1][0]=1;
+	s_relation[1][1]=1;
+	s_relation[1][2]=1;
+	s_relation[1][3]=1;
+	
+	s_relation[2][0]=2;
+	s_relation[2][1]=0;
+	s_relation[2][2]=0;
+	s_relation[2][3]=0;
+	
+	s_relation[3][0]=2;
+	s_relation[3][1]=2;
+	s_relation[3][2]=0;
+	s_relation[3][3]=2;
+	
+	s_relation[4][0]=3;
+	s_relation[4][1]=3;
+	s_relation[4][2]=3;
+	s_relation[4][3]=3;
+	
+	s_relation[5][0]=2;
+	s_relation[5][1]=1;
+	s_relation[5][2]=0;
+	s_relation[5][3]=3;
+	
+	f_relation[0][0]=2;
+	f_relation[0][1]=1;
+	f_relation[0][2]=3;
+	f_relation[0][3]=4;
+	
+	f_relation[1][0]=2;
+	f_relation[1][1]=5;
+	f_relation[1][2]=3;
+	f_relation[1][3]=0;
+	
+	f_relation[2][0]=5;
+	f_relation[2][1]=1;
+	f_relation[2][2]=0;
+	f_relation[2][3]=4;
+	
+	f_relation[3][0]=0;
+	f_relation[3][1]=1;
+	f_relation[3][2]=5;
+	f_relation[3][3]=4;
+	
+	f_relation[4][0]=2;
+	f_relation[4][1]=0;
+	f_relation[4][2]=3;
+	f_relation[4][3]=5;
+	
+	f_relation[5][0]=3;
+	f_relation[5][1]=1;
+	f_relation[5][2]=2;
+	f_relation[5][3]=4;
 	this->fps=fps;
 	this->data=data;
 	this->count=0;
@@ -387,4 +578,11 @@ display_controller::display_controller(map* data, int fps){
 	r_direction=0;
 	theta=0;
 	to_unlock=false;
+}
+int display_controller::get_f_r(int z,int side){
+	return f_relation[z][side];
+}
+
+int display_controller::get_s_r(int z,int side){
+	return s_relation[z][side];
 }

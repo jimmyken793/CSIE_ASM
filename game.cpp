@@ -3,29 +3,38 @@
 #include<time.h>
 #include "game.h"
 
+
 void game::rotate(int r_dir){
 	locked=true;
 	to_rotate=true;
 	rotate_dir=r_dir;
 }
 
+// create a shit for the snake to eat;
+void game::createShit()
+{
+    _game_map->set_int_map( rand()%M_SIZE , rand()%M_SIZE, rand()%M_SIZE,5 );
+}
+
+
+// create a barrier on the map;
+void game::createBarrier()
+{
+
+    _game_map->set_int_map( rand()%M_SIZE , rand()%M_SIZE, rand()%M_SIZE,4 );
+    //_game_map->set_int_map( 2 ,10 , 3,4 );
+}
+
 // create an apple on the map;
 void game::createApple()
 {
-		srand(time(NULL));
+		
 		NextApple_x = rand()%M_SIZE;
 		NextApple_y = rand()%M_SIZE;
-		int tmp;
-		while(1)					// create apple in the adjacency side;
-		{
-			tmp = rand()%6;
-			if( tmp + _side_now !=5 )
-			{
-				NextApple_z = tmp;
-				break;	
-			}	
+		int tmp;	
+			tmp = rand()%6;						
 			
-		}
+	    NextApple_z = tmp;										
 		
 		//update the apple to int_map;
 		_game_map->set_int_map(NextApple_z,NextApple_x,NextApple_y,1);
@@ -36,9 +45,15 @@ void game::checkApple(int pos_z, int pos_x, int pos_y)
 {
 	 if(_game_map->get_int_map(pos_z,pos_x,pos_y) == 1)
 	 {
-		createApple();			// create another apple on the map;	
+		
 		appleWalk();		
+		createApple();			// create another apple on the map;		
 	 }
+	 else if(_game_map->get_int_map(pos_z,pos_x,pos_y) == 5)
+	 {
+	    shitWalk();
+	    createShit();
+    }
 	 else
 	    snakeWalk();
 }
@@ -84,7 +99,8 @@ void game::key(){
 }
 
 void game::int_handler(){
-	
+
+
 	count++;		
 	bool bomb_flag = false;
 	
@@ -95,18 +111,62 @@ void game::int_handler(){
 					   _game_map->getSnakeHead()->getY());		
 			
 			bomb_flag = bomb(Next_head_z, Next_head_x, Next_head_y);
-			snakeWalk();
-			_Dir_flag = 0;
+			
+			
+			if( !bomb_flag )
+			{
+			    checkApple(Next_head_z, Next_head_x, Next_head_y);
+			     _Dir_flag = 0;
 			if(to_rotate){
 				display->refresh(this->_game_map,this,rotate_dir);
 				to_rotate=false;
 			}else{
 				display->refresh(this->_game_map);
 			}
+			}
 		}
 		count = 0;
 	}
+	//ham_SyncMixer();
+	//ham_UpdateMixer();
+    //if(!mysample->playing){
+    //ham_PlaySample(mysample);
+    //}
 }
+
+void game::shitWalk()
+{
+    snake* tmp = new snake(Next_head_z , Next_head_x, Next_head_y );
+    updateShit(Next_head_z, Next_head_x, Next_head_y,tmp);
+    
+}
+
+void game::updateShit(int z, int x , int y, snake* tmpS)
+{
+     tmpS->setChild( _game_map->getSnakeHead() );
+	// set the block of the snakeHead to "2"
+	_game_map->set_int_map(z,x,y,2);
+	_game_map->getSnakeHead()->setParent(tmpS) ;
+	_game_map->set_int_map(_game_map->getSnakeHead()->getZ(),
+	                      _game_map->getSnakeHead()->getX(),
+					      _game_map->getSnakeHead()->getY(),3);
+	_game_map->setSnakeHead(tmpS);
+	
+	//reset the block that the tail is standing to "0";
+	for(int i=0 ; i < 2; i++)
+	{
+	   _game_map->set_int_map(_game_map->getSnakeTail()->getZ(),
+			              	   _game_map->getSnakeTail()->getX(),
+					       	   _game_map->getSnakeTail()->getY(),0);
+						
+	   _game_map->setSnakeTail(_game_map->getSnakeTail()->getParent());
+	   delete(_game_map->getSnakeTail()->getChild());
+	   
+	}
+	_game_map->setSnakeSize(-1);
+	
+}
+
 
 // create _game_map;
 game::game(display_controller * display){
@@ -123,13 +183,23 @@ game::game(display_controller * display){
 	   _index[i]=0;   
 	this->display = display;
 	display->refresh(this->_game_map);
+	
+	createApple();
+	srand(rand());
+	for(int i = 0 ; i <20; i++ )
+	{
+	    createBarrier();
+	  createShit();
+    }
+
+    
 }
 
 
 
 // check game over or not;
 bool game::bomb(int pos_z,int pos_x,int pos_y){
-	if(_game_map->get_int_map(pos_z,pos_x,pos_y) > 1 )
+	if(_game_map->get_int_map(pos_z,pos_x,pos_y) > 1 && _game_map->get_int_map(pos_z,pos_x,pos_y)!=5 || _game_map->getSnakeSizeNow()==2)
 		return true;	//bomb!!
 	return false;		//safe
 }
@@ -252,7 +322,7 @@ void game::update_pos(int z,int x, int y){
           Next_head_x = M_SIZE - 1;  
           
           if(flag == 1 )
-               Next_head_y = (M_SIZE -1 ) - x ;
+               Next_head_y = (M_SIZE -1) - x ;
           else if(flag == 2 )     
                Next_head_y = x;
           else if(flag == 3)
