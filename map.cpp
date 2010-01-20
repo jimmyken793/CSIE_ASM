@@ -132,11 +132,11 @@ void map::rotate(int side){
 			nu=(s_relation[camera][side]+3)%4;
 		break;
 	}
-	ham_VBAText("===spin===\nup:%d\tcamera:%d\tside:%d\n",upside,camera,side);
-	ham_VBAText("rotate:%d\n",(side-upside+4)%4);
-	ham_VBAText("s_relation[camera][side]:%d\n",s_relation[camera][side]);
-	ham_VBAText("f_relation[camera][side]:%d\n",f_relation[camera][side]);
+	//ham_VBAText("===spin===\nup:%d\tcamera:%d\tside:%d\n",upside,camera,side);
+	//ham_VBAText("rotate:%d\n",(side-upside+4)%4);
+	//ham_VBAText("s_relation[camera][side]:%d\n",s_relation[camera][side]);
+	//ham_VBAText("f_relation[camera][side]:%d\n",f_relation[camera][side]);
 	upside=nu;
 	camera=f_relation[camera][side];
-	ham_VBAText("up:%d\tcamera:%d\n",upside,camera);
+	//ham_VBAText("up:%d\tcamera:%d\n",upside,camera);
 }

@@ -35,6 +35,8 @@ bool display_controller::refresh(map * data, game* Game,int r_direction){
 		delete this->data;
 		//this->data=new map(*data);
 		this->data=data;
+	}else{
+		this->data=new map(*data);
 	}
 	rotating=true;
 	theta=0;
@@ -218,12 +220,13 @@ display_controller::display_controller(map* data, int fps){
 	ham_ClearBackBuffer(0xFF);
 	this->fps=fps;
 	this->data=data;
+	//this->data=new map(*data);
 	this->count=0;
-    block_size=8;
+	block_size=10;
 	p_size=block_size*M_SIZE;
 	distance=2*p_size;
-    top=15;
-    left=60;
+	top=4;
+	left=60;
 	rotating=false;
 	r_direction=0;
 	theta=0;

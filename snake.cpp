@@ -24,7 +24,6 @@ void snake::move(){
 	int ny=h->gety()+dy;
 	int nz=h->getz();
 	int side=0;
-	//int pos=0;
 	if(nx<0){
 		side=3;
 		switch(_map->get_s_r(nz,side)){
@@ -129,8 +128,6 @@ void snake::move(){
 		_map->rotate(side);
 	}else{
 	}
-	
-	//ham_VBAText("%d %d %d\n",nx,ny,nz);
 	body[head==maximum-1?0:(head+1)]->setpos(nx,ny,nz);
 }
 
