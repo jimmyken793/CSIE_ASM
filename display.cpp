@@ -57,49 +57,41 @@ void display_controller::print_dot(int x,int y,int type){
 
 void display_controller::print_dot(int x,int y,point *origin,point *ax,point *ay,int r_direction,int type){
 	if(type!=0){
-		ham_VBAText("%d %d\n",(int)ax->getX(),(int)ax->getY(),r_direction);
-		ham_VBAText("%d %d\tmode:%d\n",(int)ay->getX(),(int)ay->getY(),r_direction);
 		for(int iii=0;iii<block_size;iii++){
 			switch(r_direction){
 				case 0:{
-					double delta=((y*block_size+iii)*(ay->getX())/ay->getY());
-					delta=delta>0?delta:delta*-1;
-					double width=p_size-delta;
+					double dy=top+origin->getY()-((y*block_size+iii)*(ay->getY()))/p_size;
+					double delta=-1*((y*block_size+iii)*(ay->getX())/ay->getY());
+					double width=p_size-delta*2;
 					double size=width/M_SIZE;
-					int dy=top+origin->getY()-((y*block_size+iii)*(ay->getY()))/p_size;
-					if(dy>=0&&dy<=180)
+					if(dy>=top&&dy<=top+p_size)
 						ham_PutLine(left+size*x+(delta),dy,left+size*(x+1)+(delta),dy,type);
 				}
 				break;
 				case 2:{
 					double delta=(((M_SIZE-y-1)*block_size+iii)*(ay->getX())/ay->getY());
-					delta=delta>0?delta:delta*-1;
 					double width=p_size-delta*2;
 					double size=width/M_SIZE;
 					int dy=top+origin->getY()+(((M_SIZE-y-1)*block_size+iii)*(ay->getY()))/p_size;
-					if(dy>=0&&dy<=180)
+					if(dy>=top&&dy<=top+p_size)
 						ham_PutLine(left+size*x+(delta),dy,left+size*(x+1)+(delta),dy,type);
 				}
 				break;
 				case 1:{
 					double delta=(((M_SIZE-x-1)*block_size+iii)*(ay->getY())/ay->getX());
-					delta=delta>0?delta:delta*-1;
 					double width=p_size+delta*2;
 					double size=width/M_SIZE;
-					ham_VBAText("delta:%d\twidth:%d\n",(int)delta,(int)width);
 					int dx=left+origin->getX()+(((M_SIZE-x-1)*block_size+iii)*(ay->getX()))/p_size;
-					if(dx>=0&&dx<=240)
+					if(dx>=left&&dx<=left+p_size)
 						ham_PutLine(dx,top+size*y-(delta),dx,top+size*(y+1)-(delta),type);
 				}
 				break;
 				case 3:{
 					double delta=((x*block_size+iii)*(ay->getY())/ay->getX());
-					delta=delta>0?delta:delta*-1;
 					double width=p_size+delta*2;
 					double size=width/M_SIZE;
-					ham_VBAText("delta:%d\twidth:%d\n",(int)delta,(int)width);
 					int dx=left+origin->getX()+((x*block_size+iii)*(ay->getX()))/p_size;
-					if(dx>=0&&dx<=240)
+					if(dx>=left&&dx<=left+p_size)
 						ham_PutLine(dx,top+size*y-(delta),dx,top+size*(y+1)-(delta),type);
 				}
 				break;
@@ -113,7 +105,7 @@ void display_controller::PutLine(point* a,point* b,int c){
 }
 
 void display_controller::rotate(){
-	double angle=(theta*pi*10)/180;
+	double angle=(theta*pi*25)/180;
 	if(angle>pi/2)
 		angle=pi/2;
 	point *p1=new point(0,(p_size+p_size*sqrt(2)*sin((pi/-4)+angle))/2,distance-(p_size*sqrt(2)*sin((pi/4)+angle))/2);
@@ -132,21 +124,21 @@ void display_controller::rotate(){
 	
 	double h=p1->getY()-p2->getY();
 	if(h>0.001)
-		width2=(width2*p1->getY())/h;
+		width2+=(((double)p_size-width2)*(-1*p2->getY())/h);
 	h=p3->getY()-p1->getY();
-	width3+=((width3-p_size)*(p_size-p1->getY()))/h;
+	width3+=((p_size-width3)*(p3->getY()-p_size))/h;
 	double y1=(p1->getY()>=0)?p1->getY():0;
 	double y2=(p2->getY()>=0)?p2->getY():0;
 	double y3=(p3->getY()<=p_size)?p3->getY():p_size;
 	delete p1;
 	delete p2;
 	delete p3;
-	point *pa=new point((p_size-width2)/2,y2);
-	point *pb=new point((p_size+width2)/2,y2);
+	point *pa=new point((p_size-width2)/2.0,y2);
+	point *pb=new point((p_size+width2)/2.0,y2);
 	point *pc=new point(0,y1);
 	point *pd=new point(p_size,y1);
-	point *pe=new point((p_size-width3)/2,y3);
-	point *pf=new point((p_size+width3)/2,y3);
+	point *pe=new point((p_size-width3)/2.0,y3);
+	point *pf=new point((p_size+width3)/2.0,y3);
 	switch(r_direction){
 		case 0:
 			pa->reflectXY();
@@ -253,7 +245,6 @@ void display_controller::rotate(){
 		break;
 	}
 	bool transpose=false,x_r=false,y_r=false;
-	ham_VBAText("old_upside:%d\n",old_upside);
 	switch(old_upside){
 		case 0:
 		break;
@@ -324,7 +315,7 @@ void display_controller::int_handler(){
 		to_unlock=false;
 	}
 	count++;
-	if(count==1){
+	if(count==3){
 		ham_ClearBackBuffer(0xFF);
 		for(int a=0;a<6;a++){
 			for(int i=0;i<M_SIZE;i++){
@@ -368,7 +359,6 @@ void display_controller::int_handler(){
 				}
 			}
 		}
-		//ham_VBAText("%d %d\n",(int)(50+(40*cos(5*t*pi/180))),(int)(50+(40*sin(5*t*pi/180))));*/
 		ham_FlipBGBuffer();
 		count=0;
 	}
@@ -381,12 +371,12 @@ display_controller::display_controller(map* data, int fps){
 	ham_SetBgPalColRGB(2,0xff,0,0);
 	ham_SetBgPalColRGB(3,0,0xff,0);
 	ham_SetBgPalColRGB(4,0,0,0xff);
+	ham_SetBgPalColRGB(5,0xff,0,0xff);
 	ham_ClearBackBuffer(0xFF);
 	ham_FlipBGBuffer();
 	ham_ClearBackBuffer(0xFF);
 	this->fps=fps;
 	this->data=data;
-	//this->data=new map(*data);
 	this->count=0;
 	block_size=10;
 	p_size=block_size*M_SIZE;
