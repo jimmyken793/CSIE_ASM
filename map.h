@@ -1,34 +1,38 @@
-#ifndef MAP_H
+	#ifndef MAP_H
 #define MAP_H
 
 #include "setting/setting.h"
-#include "game.h"
-class game;
+#include "snake.h"
+
 class map{
 	public:
-		map(game* Game);
+		map();
 		~map();
+		snake* getSnakeHead();
+		snake* getSnakeTail();
+		int getSnakeHead_Dir();
+		int getSnakeSizeNow();
 		int get_int_map(int z, int x, int y);
+		void setSnakeHead(snake* Head);
+		void setSnakeTail(snake* Tail);
+		void setSnakeHead_Dir(int Dir);
 		void set_int_map(int z, int x, int y, int type);
+		void setSnakeSize(int value);
 		int* get_whole_int_map();
-		void clear();
-		int get_f_r(int z,int side);
-		int get_s_r(int z,int side);
-		void set_camera(int camera);
-		int get_camera();
-		void set_upside(int upside);
-		int get_upside();
-		void rotate(int side);
+		
 	private:
+		
+		snake* SnakeHead;
+		snake* SnakeTail;
+		int SnakeHead_Dir;	// record the direction of the snake's head now;
+		// up = 1; down = 2; left = 3; right = 4 ;
+		
 		//elements that construct the whole map;
 		// blank = 0; apple = 1; snakeHead = 2; snakeBody = 3; barrier = 4;
 		int int_map[6][M_SIZE][M_SIZE];
-		int camera;
-		int upside;
-		int f_relation[6][4];
-		int s_relation[6][4];
-		game* Game;
 		//		    z	 x		 y
+		int snakeSizeNow;
+		void init_snake();
 };
 
 #endif
