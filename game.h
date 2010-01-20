@@ -5,13 +5,16 @@
 #include "snake.h"
 #include "map.h"
 
-
+class display_controller;
+class snake;
 class game{
 	public:
+		void lock();
 		void unlock();
 		void int_handler();		// timer;
 		game(display_controller *display);
 		~game();
+		void key();
 	private:
 		map* _game_map;
 		
@@ -55,6 +58,11 @@ class game{
 		void updateSnake(int z,int x,int y, snake* tmpS);
 		void setNewSide(int a);
 		void coordinate(int nowside,int nextside,int x,int y);
+		
+		bool locked;
+		bool to_rotate;
+		int rotate_dir;
+		void rotate(int r_dir);
 };
 
 #endif

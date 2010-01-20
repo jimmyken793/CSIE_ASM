@@ -23,6 +23,8 @@ class display_controller{
         int left;
         game* Game;
         bool to_unlock;
+        int old_upside;
+        int old_camera;
     public:
         bool refresh();
         /*
@@ -41,6 +43,7 @@ class display_controller{
             unlock function
         */
         void print_dot(int x,int y,int type);
+        void print_dot(int x,int y,point *origin,point *ax,point *ay,int r_direction,int type);
         void rotate();
         bool refresh(map * data, game* Game,int r_direction);
         void PutLine(point* a,point* b,int c);

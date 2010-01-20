@@ -15,6 +15,9 @@ class point{
 		void reflectXY();
 		void reflectX(double ax);
 		void reflectY(double ay);
+		void reverseX();
+		void reverseY();
+		void reverseXY();
 };
 
 #endif

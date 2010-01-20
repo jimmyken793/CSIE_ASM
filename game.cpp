@@ -3,6 +3,12 @@
 #include<time.h>
 #include "game.h"
 
+void game::rotate(int r_dir){
+	locked=true;
+	to_rotate=true;
+	rotate_dir=r_dir;
+}
+
 // create an apple on the map;
 void game::createApple()
 {
@@ -59,17 +65,14 @@ void game::updateAppleWalk(int z, int x, int y, snake* tmpS)
 }
 
 void game::unlock(){
-	
+	locked=false;
+}
+void game::lock(){
+	locked=true;
 }
 
 
-
-void game::int_handler(){
-	
-	count++;		
-	bool bomb_flag = false;
-	
-	
+void game::key(){
 	if(F_CTRLINPUT_UP_PRESSED )
 	   _Dir_flag = 1;
 	else if(F_CTRLINPUT_DOWN_PRESSED)
@@ -78,21 +81,30 @@ void game::int_handler(){
        _Dir_flag = 3;      
 	else if(F_CTRLINPUT_RIGHT_PRESSED)
 	   _Dir_flag = 4;
-	   
-	   
-	if(count == 15)
-	{
-		
-		update_pos(_game_map->getSnakeHead()->getZ(),
-		           _game_map->getSnakeHead()->getX(),
-				   _game_map->getSnakeHead()->getY());		
-		
-		bomb_flag = bomb(Next_head_z, Next_head_x, Next_head_y);
-		snakeWalk();
+}
+
+void game::int_handler(){
+	
+	count++;		
+	bool bomb_flag = false;
+	
+	if(count == 15){
+		if(!locked){
+			update_pos(_game_map->getSnakeHead()->getZ(),
+					   _game_map->getSnakeHead()->getX(),
+					   _game_map->getSnakeHead()->getY());		
+			
+			bomb_flag = bomb(Next_head_z, Next_head_x, Next_head_y);
+			snakeWalk();
+			_Dir_flag = 0;
+			if(to_rotate){
+				display->refresh(this->_game_map,this,rotate_dir);
+				to_rotate=false;
+			}else{
+				display->refresh(this->_game_map);
+			}
+		}
 		count = 0;
-		display->refresh(this->_game_map);
-		
-		_Dir_flag = 0;
 	}
 }
 
@@ -106,6 +118,7 @@ game::game(display_controller * display){
 	_downside = 3;
 	_backside = 5;
 	_Dir_flag = 0;
+	locked=false;
 	for(int i=0;i<6;i++)
 	   _index[i]=0;   
 	this->display = display;
@@ -177,8 +190,10 @@ void game::update_pos(int z,int x, int y){
 	else if(tmpDir==3&&checkBoundary(z,x-1,y)==3) flag=3;
 	else if(tmpDir==4&&checkBoundary(z,x+1,y)==4) flag=4;
 	else flag=0;
-	int transpose[4] = {1,4,2,3};
-    int index_trans[5] = {0,0,2,3,1};                 
+	static int transpose[4] = {1,4,2,3};
+	static int index_trans[5] = {0,0,2,3,1};
+	static int rotate_dir[4] = {0,2,3,1};
+	static int project[4]={0,3,2,1};
 	int display_flag=0;
 	
     
@@ -187,11 +202,13 @@ void game::update_pos(int z,int x, int y){
        //transpose  back to the cordinate of the display sight;     
        
        display_flag = transpose[ (index_trans[flag] + _index[_side_now] ) % 4 ];
-      
-       // rotate(display_flag);
+    //   
+                
        
-       // update _side_now, leftside....        
-       setNewSide(display_flag);     
+       // update _side_now, leftside....       
+       setNewSide(display_flag); 
+       _game_map->set_upside(project[_index[_side_now]]);    
+       rotate(rotate_dir[display_flag-1]);
        
        int tmpflag = display_flag;
        
@@ -255,12 +272,11 @@ void game::update_pos(int z,int x, int y){
                Next_head_y = (M_SIZE-1) - y;
           else if( flag == 4)     
                Next_head_y = y;
-       }
+       }             
        
-       _game_map->setSnakeHead_Dir(tmpflag);
-            
+         _game_map->setSnakeHead_Dir(tmpflag);   
     }
-	else{//4ºØ  need not to rotate,just change the Next_head
+	else{//4ï¿½ï¿½  need not to rotate,just change the Next_head
 		if(tmpDir ==1){
 			Next_head_y=y-1;
 			Next_head_x=x;
@@ -280,10 +296,14 @@ void game::update_pos(int z,int x, int y){
 		
 	}
 	
+	
 	Next_head_z=_side_now;
 }
 
 void game::setNewSide(int a){
+//	rotate(_upside);
+	//_game_map->set_upside(_upside);
+//	ham_VBAText("upside:%d\n",_side_now);
 	if(a==1){
         //update the _index[];
         _index[_rightside] +=3 ;
@@ -355,11 +375,10 @@ void game::setNewSide(int a){
 		_side_now=_rightside;
 		_rightside=5-_leftside;
 	}
-	ham_VBAText("%d\n",_side_now);
-}
-				
-		
 	
+}
+
+
 // control the move of the snake;
 // create a new SnakeHead, delete the Snaketail and update them;
 void game::snakeWalk(){

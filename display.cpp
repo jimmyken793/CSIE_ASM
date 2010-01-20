@@ -20,6 +20,8 @@ bool display_controller::refresh(map * data){
 		//this->data=new map(*data);
 		this->data=data;
 	}
+	old_camera=data->get_camera();
+	old_upside=data->get_upside();
 	return true;
 }
 /*
@@ -53,6 +55,59 @@ void display_controller::print_dot(int x,int y,int type){
 	}
 }
 
+void display_controller::print_dot(int x,int y,point *origin,point *ax,point *ay,int r_direction,int type){
+	if(type!=0){
+		ham_VBAText("%d %d\n",(int)ax->getX(),(int)ax->getY(),r_direction);
+		ham_VBAText("%d %d\tmode:%d\n",(int)ay->getX(),(int)ay->getY(),r_direction);
+		for(int iii=0;iii<block_size;iii++){
+			switch(r_direction){
+				case 0:{
+					double delta=((y*block_size+iii)*(ay->getX())/ay->getY());
+					delta=delta>0?delta:delta*-1;
+					double width=p_size-delta;
+					double size=width/M_SIZE;
+					int dy=top+origin->getY()-((y*block_size+iii)*(ay->getY()))/p_size;
+					if(dy>=0&&dy<=180)
+						ham_PutLine(left+size*x+(delta),dy,left+size*(x+1)+(delta),dy,type);
+				}
+				break;
+				case 2:{
+					double delta=(((M_SIZE-y-1)*block_size+iii)*(ay->getX())/ay->getY());
+					delta=delta>0?delta:delta*-1;
+					double width=p_size-delta*2;
+					double size=width/M_SIZE;
+					int dy=top+origin->getY()+(((M_SIZE-y-1)*block_size+iii)*(ay->getY()))/p_size;
+					if(dy>=0&&dy<=180)
+						ham_PutLine(left+size*x+(delta),dy,left+size*(x+1)+(delta),dy,type);
+				}
+				break;
+				case 1:{
+					double delta=(((M_SIZE-x-1)*block_size+iii)*(ay->getY())/ay->getX());
+					delta=delta>0?delta:delta*-1;
+					double width=p_size+delta*2;
+					double size=width/M_SIZE;
+					ham_VBAText("delta:%d\twidth:%d\n",(int)delta,(int)width);
+					int dx=left+origin->getX()+(((M_SIZE-x-1)*block_size+iii)*(ay->getX()))/p_size;
+					if(dx>=0&&dx<=240)
+						ham_PutLine(dx,top+size*y-(delta),dx,top+size*(y+1)-(delta),type);
+				}
+				break;
+				case 3:{
+					double delta=((x*block_size+iii)*(ay->getY())/ay->getX());
+					delta=delta>0?delta:delta*-1;
+					double width=p_size+delta*2;
+					double size=width/M_SIZE;
+					ham_VBAText("delta:%d\twidth:%d\n",(int)delta,(int)width);
+					int dx=left+origin->getX()+((x*block_size+iii)*(ay->getX()))/p_size;
+					if(dx>=0&&dx<=240)
+						ham_PutLine(dx,top+size*y-(delta),dx,top+size*(y+1)-(delta),type);
+				}
+				break;
+			}
+		}
+	}
+}
+
 void display_controller::PutLine(point* a,point* b,int c){
 	ham_PutLine(left+a->getX(),top+a->getY(),left+b->getX(),top+b->getY(),c);
 }
@@ -66,6 +121,15 @@ void display_controller::rotate(){
 	point *p3=new point(0,(p_size+p_size*sqrt(2)*sin((pi/4)+angle))/2,distance-(p_size*sqrt(2)*cos((pi/4)+angle))/2);
 	double width2=p_size*p1->getZ()/p2->getZ();
 	double width3=p_size*p1->getZ()/p3->getZ();
+	
+	
+	point *va=new point((p_size-width2)/(2),(p2->getY()-p1->getY()));
+	point *vb=new point((width2-p_size)/(2),(p2->getY()-p1->getY()));
+	point *vc=new point(p_size,0.0);
+	point *vd=new point(p_size*-1,0.0);
+	point *ve=new point((p_size-width3)/(2),(p3->getY()-p1->getY()));
+	point *vf=new point((width3-p_size)/(2),(p3->getY()-p1->getY()));
+	
 	double h=p1->getY()-p2->getY();
 	if(h>0.001)
 		width2=(width2*p1->getY())/h;
@@ -73,7 +137,7 @@ void display_controller::rotate(){
 	width3+=((width3-p_size)*(p_size-p1->getY()))/h;
 	double y1=(p1->getY()>=0)?p1->getY():0;
 	double y2=(p2->getY()>=0)?p2->getY():0;
-	double y3=(p3->getY()<=p_size)?p2->getY():p_size;
+	double y3=(p3->getY()<=p_size)?p3->getY():p_size;
 	delete p1;
 	delete p2;
 	delete p3;
@@ -91,6 +155,24 @@ void display_controller::rotate(){
 			pd->reflectXY();
 			pe->reflectXY();
 			pf->reflectXY();
+			va->reflectXY();
+			vb->reflectXY();
+			vc->reflectXY();
+			vd->reflectXY();
+			ve->reflectXY();
+			vf->reflectXY();
+			pa->reflectY(p_size/2);
+			pb->reflectY(p_size/2);
+			pc->reflectY(p_size/2);
+			pd->reflectY(p_size/2);
+			pe->reflectY(p_size/2);
+			pf->reflectY(p_size/2);
+			va->reverseXY();
+			vb->reverseXY();
+			vc->reverseXY();
+			vd->reverseXY();
+			ve->reverseXY();
+			vf->reverseXY();
 		case 1:
 			pa->reflectXY();
 			pb->reflectXY();
@@ -98,12 +180,24 @@ void display_controller::rotate(){
 			pd->reflectXY();
 			pe->reflectXY();
 			pf->reflectXY();
+			va->reflectXY();
+			vb->reflectXY();
+			vc->reflectXY();
+			vd->reflectXY();
+			ve->reflectXY();
+			vf->reflectXY();
 			pa->reflectX(p_size/2);
 			pb->reflectX(p_size/2);
 			pc->reflectX(p_size/2);
 			pd->reflectX(p_size/2);
 			pe->reflectX(p_size/2);
 			pf->reflectX(p_size/2);
+			va->reverseX();
+			vb->reverseX();
+			vc->reverseX();
+			vd->reverseX();
+			ve->reverseX();
+			vf->reverseX();
 		break;
 		case 2:
 			pa->reflectY(p_size/2);
@@ -112,6 +206,24 @@ void display_controller::rotate(){
 			pd->reflectY(p_size/2);
 			pe->reflectY(p_size/2);
 			pf->reflectY(p_size/2);
+			va->reverseY();
+			vb->reverseY();
+			vc->reverseY();
+			vd->reverseY();
+			ve->reverseY();
+			vf->reverseY();
+			pa->reflectX(p_size/2);
+			pb->reflectX(p_size/2);
+			pc->reflectX(p_size/2);
+			pd->reflectX(p_size/2);
+			pe->reflectX(p_size/2);
+			pf->reflectX(p_size/2);
+			va->reverseX();
+			vb->reverseX();
+			vc->reverseX();
+			vd->reverseX();
+			ve->reverseX();
+			vf->reverseX();
 		break;
 		case 3:
 			pa->reflectXY();
@@ -120,13 +232,65 @@ void display_controller::rotate(){
 			pd->reflectXY();
 			pe->reflectXY();
 			pf->reflectXY();
+			va->reflectXY();
+			vb->reflectXY();
+			vc->reflectXY();
+			vd->reflectXY();
+			ve->reflectXY();
+			vf->reflectXY();
+			pa->reflectY(p_size/2);
+			pb->reflectY(p_size/2);
+			pc->reflectY(p_size/2);
+			pd->reflectY(p_size/2);
+			pe->reflectY(p_size/2);
+			pf->reflectY(p_size/2);
+			va->reverseY();
+			vb->reverseY();
+			vc->reverseY();
+			vd->reverseY();
+			ve->reverseY();
+			vf->reverseY();
 		break;
+	}
+	bool transpose=false,x_r=false,y_r=false;
+	ham_VBAText("old_upside:%d\n",old_upside);
+	switch(old_upside){
+		case 0:
+		break;
+		case 1:
+			y_r=true;
+			transpose=true;
+		break;
+		case 2:
+			x_r=true;
+			y_r=true;
+		break;
+		case 3:
+			x_r=true;
+			transpose=true;
+		break;
+	}
+	for(int i=0;i<M_SIZE;i++){
+		for(int ii=0;ii<M_SIZE;ii++){
+			int x,y;
+			if(transpose){
+				y=x_r?M_SIZE-1-i:i;
+				x=y_r?M_SIZE-1-ii:ii;
+			}else{
+				x=x_r?M_SIZE-1-i:i;
+				y=y_r?M_SIZE-1-ii:ii;
+			}
+			int type=this->data->get_int_map(old_camera,x,y);
+			if(type!=0){
+				print_dot(i,ii,pc,vc,ve,r_direction,type);
+			}
+		}
 	}
 	PutLine(pa,pb,1);
 	PutLine(pa,pc,1);
 	PutLine(pd,pb,1);
-	PutLine(pc,pd,1);
-	PutLine(pc,pe,1);
+	PutLine(pc,pd,3);
+	PutLine(pc,pe,2);
 	PutLine(pe,pf,1);
 	PutLine(pd,pf,1);
 	delete pa;
@@ -135,6 +299,12 @@ void display_controller::rotate(){
 	delete pd;
 	delete pe;
 	delete pf;
+	delete va;
+	delete vb;
+	delete vc;
+	delete vd;
+	delete ve;
+	delete vf;
 	if(angle<pi/2){
 		theta++;
 	}else{
@@ -171,7 +341,6 @@ void display_controller::int_handler(){
 			ham_PutLine(left,top+p_size,left+p_size,top+p_size,1);
 			ham_PutLine(left+p_size,top,left+p_size,top+p_size,1);
 			int camera=data->get_camera();
-			int initx,inity,x_inc,y_inc,x_end,y_end;
 			bool transpose=false,x_r=false,y_r=false;
 			switch(data->get_upside()){
 				case 0:
@@ -199,9 +368,6 @@ void display_controller::int_handler(){
 				}
 			}
 		}
-		//int basex=int(110+sin(t*pi/180)*40);
-		//int basey=70;
-		//ham_PutLine(basex-(40*cos(t*pi/180)),basey-(40*sin(t*pi/180)),(int)(basex+(40*cos(t*pi/180))),(int)(basey+(40*sin(t*pi/180))),(count/60)%3+2);
 		//ham_VBAText("%d %d\n",(int)(50+(40*cos(5*t*pi/180))),(int)(50+(40*sin(5*t*pi/180))));*/
 		ham_FlipBGBuffer();
 		count=0;

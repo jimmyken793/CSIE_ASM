@@ -13,7 +13,7 @@ map::map(){
 	}
 	init_snake();
 	
-	SnakeHead_Dir = 4 ;  // default rightward;
+	SnakeHead_Dir = 1 ;  // default rightward;
 }
 
 map::~map(){
@@ -37,7 +37,7 @@ void map::init_snake()
 	SnakeHead->setParent(SnakeHead);
 	SnakeTail=SnakeHead;
 
-	for(int i=1;i<=2;i++){
+	for(int i=1;i<=5;i++){
 		tmp=new snake(SnakeTail->getZ(), (SnakeTail->getX())-1, SnakeTail->getY());
 		tmp->setParent(SnakeTail);
 		SnakeTail->setChild(tmp);
@@ -89,4 +89,16 @@ void map::setSnakeTail(snake* Tail){
 int* map::get_whole_int_map()
 {
 	return &int_map[0][0][0];
+}
+
+int map::get_camera(){
+	return getSnakeHead()->getZ();
+}
+
+void map::set_upside(int upside){
+	this->upside=upside;
+}
+
+int map::get_upside(){
+	return upside;
 }

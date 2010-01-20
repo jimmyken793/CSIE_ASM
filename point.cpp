@@ -36,3 +36,15 @@ void point::reflectX(double ax){
 void point::reflectY(double ay){
 	y=ay+(ay-y);
 }
+
+void point::reverseX(){
+	x*=-1;
+}
+
+void point::reverseY(){
+	y*=-1;
+}
+void point::reverseXY(){
+	x*=-1;
+	y*=-1;
+}

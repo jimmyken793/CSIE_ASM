@@ -19,8 +19,14 @@ class map{
 		void set_int_map(int z, int x, int y, int type);
 		void setSnakeSize(int value);
 		int* get_whole_int_map();
-		
+		void set_camera(int camera);
+		int get_camera();
+		void set_upside(int upside);
+		int get_upside();
 	private:
+		
+		int camera;
+		int upside;
 		
 		snake* SnakeHead;
 		snake* SnakeTail;
