@@ -57,10 +57,6 @@ void display_controller::print_dot(int x,int y,int type){
 
 void display_controller::print_dot(int x,int y,point *origin,point *ax,point *ay,int r_direction,int mode,int type){
 	if(type!=0){
-		if(mode==1){
-		//printf("%d,%d\tmode:%d\n",(int)ax->getX(),(int)ax->getY(),mode);
-		//printf("%d,%d\t\n",(int)ay->getX(),(int)ay->getY());
-		}
 		for(int iii=0;iii<block_size;iii++){
 			switch(r_direction){
 				case 0:
@@ -131,7 +127,6 @@ void display_controller::print_dot1(int x,int y,point *origin,point *ax,point *a
 						double width=p_size+delta*2;
 						double size=width/M_SIZE;
 						double dx=origin->getX()+(((x)*block_size+iii)*(ay->getX()))/p_size;
-						
 						if(dx>=0&&dx<=p_size)
 							ham_PutLine(left+dx,top+size*y-(delta),left+dx,top+size*(y+1)-(delta),type);
 					}
@@ -166,7 +161,7 @@ void display_controller::PutLine(point* a,point* b,int c){
 }
 
 void display_controller::rotate(){
-	double angle=(theta*pi*23)/180;
+	double angle=(theta*pi*33)/180;
 	if(angle>pi/2)
 		angle=pi/2;
 	point *p1=new point(0,(p_size+p_size*sqrt(2)*sin((pi/-4)+angle))/2,distance-(p_size*sqrt(2)*sin((pi/4)+angle))/2);
@@ -307,7 +302,7 @@ void display_controller::rotate(){
 		case 0:
 			switch(r_direction){
 				case 0://
-					x_r1=true;
+					x_r1=true; 
 				break;
 				case 1://x
 					transpose1=true;
@@ -368,6 +363,8 @@ void display_controller::rotate(){
 				case 1://x
 				break;
 				case 2:
+					transpose1=true;
+					x_r1=true;
 					y_r1=true;
 				break;
 				case 3:
@@ -408,8 +405,8 @@ void display_controller::rotate(){
 	//printf("==========================\n");
 	PutLine(pa,pb,1);
 	PutLine(pa,pc,1);
-	PutLine(pd,pb,3);
-	PutLine(pc,pd,2);
+	PutLine(pd,pb,1);
+	PutLine(pc,pd,1);
 	PutLine(pc,pe,1);
 	PutLine(pe,pf,1);
 	PutLine(pd,pf,1);
@@ -441,19 +438,78 @@ void display_controller::rotate(){
 void display_controller::int_handler(){
 	if(data==0)
 		return;
-	static const int base[6][2]={{1,1},{2,1},{1,0},{1,2},{0,1},{1,3}};
+	static const int base[5][2]={{1,0},{2,1},{1,2},{0,1},{1,1}};
 	if(to_unlock){
 		Game->unlock();
 		to_unlock=false;
 	}
 	count++;
-	if(count==15){
+	if(count==14){
 		ham_ClearBackBuffer(0xFF);
-		for(int a=0;a<6;a++){
+		int c=data->get_camera();
+		int u=data->get_upside();
+		bool transpose=false,x_r=false,y_r=false;
+		for(int a=0;a<4;a++){
+			int us=(s_relation[c][(a+u)%4]+(6-a))%4;
+			switch(us){
+				case 0:
+				break;
+				case 1:
+					y_r=true;
+					transpose=true;
+				break;
+				case 2:
+					x_r=true;
+					y_r=true;
+				break;
+				case 3:
+					x_r=true;
+					transpose=true;
+				break;
+			}
 			for(int i=0;i<M_SIZE;i++){
 				for(int ii=0;ii<M_SIZE;ii++){
-					ham_PutPixel(7+base[a][0]*M_SIZE+i,30+base[a][1]*M_SIZE+ii,this->data->get_int_map(a,i,ii));
+					int x=x_r?M_SIZE-1-i:i;
+					int y=y_r?M_SIZE-1-ii:ii;
+					if(transpose){
+						int tmp=y;
+						y=x;
+						x=tmp;
+					}
+					int d=this->data->get_int_map(f_relation[c][(a+u)%4],x,y);
+					ham_PutPixel(base[a][0]*M_SIZE*2+i*2,30+base[a][1]*M_SIZE*2+ii*2,d);
+					ham_PutPixel(base[a][0]*M_SIZE*2+i*2,30+base[a][1]*M_SIZE*2+ii*2+1,d);
+					ham_PutPixel(base[a][0]*M_SIZE*2+i*2+1,30+base[a][1]*M_SIZE*2+ii*2,d);
+					ham_PutPixel(base[a][0]*M_SIZE*2+i*2+1,30+base[a][1]*M_SIZE*2+ii*2+1,d);
 				}
+			}
+		}
+		transpose=false,x_r=false,y_r=false;
+		switch(u){
+			case 0:
+			break;
+			case 1:
+				y_r=true;
+				transpose=true;
+			break;
+			case 2:
+				x_r=true;
+				y_r=true;
+			break;
+			case 3:
+				x_r=true;
+				transpose=true;
+			break;
+		}
+		for(int i=0;i<M_SIZE;i++){
+			for(int ii=0;ii<M_SIZE;ii++){
+				int x=x_r?M_SIZE-1-i:i;
+				int y=y_r?M_SIZE-1-ii:ii;
+				int d=transpose?this->data->get_int_map(c,y,x):this->data->get_int_map(c,x,y);
+				ham_PutPixel(base[4][0]*M_SIZE*2+i*2,30+base[4][1]*M_SIZE*2+ii*2,d);
+				ham_PutPixel(base[4][0]*M_SIZE*2+i*2,30+base[4][1]*M_SIZE*2+ii*2+1,d);
+				ham_PutPixel(base[4][0]*M_SIZE*2+i*2+1,30+base[4][1]*M_SIZE*2+ii*2,d);
+				ham_PutPixel(base[4][0]*M_SIZE*2+i*2+1,30+base[4][1]*M_SIZE*2+ii*2+1,d);
 			}
 		}
 		if(rotating){
@@ -499,11 +555,11 @@ display_controller::display_controller(map* data, int fps){
 	ham_SetBgMode(4);
 	ham_SetBgPalColRGB(0xFF,0,0,0);
 	ham_SetBgPalColRGB(0,0xEE,0x82,0xEE);
-	ham_SetBgPalColRGB(1,0xff,0xff,0xff);
-	ham_SetBgPalColRGB(2,0xff,0,0);
-	ham_SetBgPalColRGB(3,0,0xff,0);
-	ham_SetBgPalColRGB(4,0,0,0xff);
-	ham_SetBgPalColRGB(5,0xff,0,0xff);
+	ham_SetBgPalColRGB(1,0xff,0,0);//apple is red
+	ham_SetBgPalColRGB(2,0xff,0xff,0xff);//snake head is white
+	ham_SetBgPalColRGB(3,0,0xff,0);//green
+	ham_SetBgPalColRGB(4,0,0,0xff);//barrier is blue
+	ham_SetBgPalColRGB(5,0xcc,0x99,0);//shit is brown(204,153,0)
 	ham_ClearBackBuffer(0xFF);
 	ham_FlipBGBuffer();
 	ham_ClearBackBuffer(0xFF);
@@ -569,11 +625,11 @@ display_controller::display_controller(map* data, int fps){
 	this->fps=fps;
 	this->data=data;
 	this->count=0;
-	block_size=10;
+	block_size=8;
 	p_size=block_size*M_SIZE;
 	distance=2*p_size;
-	top=4;
-	left=60;
+	top=17;
+	left=99;
 	rotating=false;
 	r_direction=0;
 	theta=0;

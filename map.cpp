@@ -54,7 +54,6 @@ int map::get_int_map(int z, int x, int y){
 
 void map::set_int_map(int z, int x, int y, int type)
 {
-
 	int_map[z][x][y] = type;
 }
 snake* map::getSnakeHead(){
